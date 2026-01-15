@@ -3,8 +3,6 @@ import { Resend } from "resend";
 import { contactSchema } from "@/lib/validations/contact";
 import { ContactNotificationEmail } from "@/emails/ContactNotification";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function POST(request: NextRequest) {
   try {
     // 環境変数チェック
@@ -23,6 +21,9 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       );
     }
+
+    // Resendクライアントをランタイムで初期化（ビルド時エラー回避）
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
     const body = await request.json();
 
