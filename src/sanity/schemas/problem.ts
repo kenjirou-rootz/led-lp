@@ -2,42 +2,83 @@ import { defineType, defineField } from 'sanity'
 
 export default defineType({
   name: 'problem',
-  title: '課題（Problem）',
+  title: '課題セクション（Problem）',
   type: 'document',
   fields: [
     defineField({
-      name: 'problemText',
-      title: '課題テキスト',
+      name: 'sectionTitle',
+      title: 'セクションタイトル',
       type: 'string',
-      description: '例: LEDビジョンを使いたいが、何を選べばいいかわからない',
-      validation: (Rule) => Rule.required(),
+      description: '例: こんなお悩みありませんか？',
+      initialValue: 'こんなお悩みありませんか？',
     }),
     defineField({
-      name: 'icon',
-      title: 'アイコン',
-      type: 'image',
-      description: '課題を表すアイコン画像（任意）',
+      name: 'sectionSubtitle',
+      title: 'セクションサブタイトル',
+      type: 'string',
+      description: '例: LEDビジョンの導入には、さまざまな不安がつきものです。',
     }),
     defineField({
-      name: 'order',
-      title: '表示順',
-      type: 'number',
-      validation: (Rule) => Rule.required().integer().positive(),
+      name: 'items',
+      title: '課題カード',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          name: 'problemItem',
+          title: '課題アイテム',
+          fields: [
+            defineField({
+              name: 'title',
+              title: 'カードタイトル',
+              type: 'string',
+              description: '例: 機材選びがわからない',
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: 'description',
+              title: '説明文',
+              type: 'text',
+              rows: 2,
+              description: '例: LEDビジョンを使いたいが、何を選べばいいかわからない',
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: 'backgroundImage',
+              title: '背景画像',
+              type: 'image',
+              options: { hotspot: true },
+              validation: (Rule) => Rule.required(),
+              fields: [
+                defineField({
+                  name: 'alt',
+                  title: '代替テキスト',
+                  type: 'string',
+                }),
+              ],
+            }),
+          ],
+          preview: {
+            select: { title: 'title', media: 'backgroundImage' },
+          },
+        },
+      ],
+      validation: (Rule) => Rule.min(1).max(9),
     }),
-  ],
-  orderings: [
-    {
-      title: '表示順',
-      name: 'orderAsc',
-      by: [{ field: 'order', direction: 'asc' }],
-    },
+    defineField({
+      name: 'transitionText',
+      title: '遷移テキスト',
+      type: 'string',
+      description: 'セクション下部のテキスト（例: そのお悩み、すべて解決できます。）',
+      initialValue: 'そのお悩み、すべて解決できます。',
+    }),
   ],
   preview: {
-    select: { title: 'problemText', subtitle: 'order' },
-    prepare({ title, subtitle }) {
+    select: { title: 'sectionTitle' },
+    prepare({ title }) {
       return {
-        title,
-        subtitle: `表示順: ${subtitle}`,
+        title: title || '課題セクション',
+        subtitle: 'Problem Section',
       }
     },
   },

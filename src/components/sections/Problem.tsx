@@ -1,101 +1,108 @@
 "use client";
 
 import { motion } from "motion/react";
-import { AlertCircle, HelpCircle, Clock, DollarSign, FileQuestion, Headphones } from "lucide-react";
+import Image from "next/image";
 import { Section } from "@/components/layout";
-import { Heading, Card } from "@/components/ui";
+import { Heading } from "@/components/ui";
 import { StaggerContainer, StaggerItem } from "@/components/animation";
-import type { ProblemData } from "@/lib/sanity";
+import type { ProblemSectionData, ProblemItemData } from "@/lib/sanity";
 
-interface ProblemItem {
-  icon: React.ComponentType<{ className?: string }>;
-  text: string;
-}
-
-const defaultProblems: ProblemItem[] = [
+// デフォルトのカードデータ（CMSデータがない場合）
+const defaultItems: ProblemItemData[] = [
   {
-    icon: HelpCircle,
-    text: "LEDビジョンを使いたいが、何を選べばいいかわからない",
+    title: "機材選びがわからない",
+    description: "LEDビジョンを使いたいが、何を選べばいいかわからない",
+    backgroundImageUrl: "/images/problem-1.jpg",
   },
   {
-    icon: AlertCircle,
-    text: "当日のトラブルが心配で、社内稟議も通しにくい",
+    title: "当日のトラブルが心配",
+    description: "機材トラブルが心配で、社内稟議も通しにくい",
+    backgroundImageUrl: "/images/problem-2.jpg",
   },
   {
-    icon: Clock,
-    text: "複数社に見積もりを取る時間がない",
+    title: "見積もり取得の時間がない",
+    description: "複数社に見積もりを取る時間がない",
+    backgroundImageUrl: "/images/problem-3.jpg",
   },
   {
-    icon: DollarSign,
-    text: "価格が不透明で、予算内に収まるか不安",
+    title: "価格が不透明",
+    description: "価格が不透明で、予算内に収まるか不安",
+    backgroundImageUrl: "/images/problem-4.jpg",
   },
   {
-    icon: FileQuestion,
-    text: "専門用語（ルーメン、ピクセルピッチ等）がわからない",
+    title: "専門用語がわからない",
+    description: "ルーメン、ピクセルピッチ等の専門用語がわからない",
+    backgroundImageUrl: "/images/problem-5.jpg",
   },
   {
-    icon: Headphones,
-    text: "初めての利用で、サポート体制が気になる",
+    title: "サポート体制が不安",
+    description: "初めての利用で、サポート体制が気になる",
+    backgroundImageUrl: "/images/problem-6.jpg",
   },
 ];
 
-// デフォルトアイコンのマッピング
-const defaultIcons = [HelpCircle, AlertCircle, Clock, DollarSign, FileQuestion, Headphones];
-
 interface ProblemProps {
-  title?: string;
-  subtitle?: string;
-  problems?: ProblemItem[];
-  problemsData?: ProblemData[];
+  problemSectionData?: ProblemSectionData | null;
 }
 
-export function Problem({
-  title = "こんなお悩みはありませんか？",
-  subtitle = "LEDビジョンの導入には、さまざまな不安がつきものです。",
-  problems = defaultProblems,
-  problemsData,
-}: ProblemProps) {
-  // CMSデータがある場合はそちらを使用、なければデフォルト
-  const displayProblems = problemsData && problemsData.length > 0
-    ? problemsData.map((p, index) => ({
-        icon: defaultIcons[index % defaultIcons.length],
-        text: p.problemText,
-      }))
-    : problems;
+export function Problem({ problemSectionData }: ProblemProps) {
+  const sectionTitle = problemSectionData?.sectionTitle || "こんなお悩みはありませんか？";
+  const sectionSubtitle = problemSectionData?.sectionSubtitle || "LEDビジョンの導入には、さまざまな不安がつきものです。";
+  const transitionText = problemSectionData?.transitionText || "そのお悩み、すべて解決できます。";
+  const items = problemSectionData?.items && problemSectionData.items.length > 0
+    ? problemSectionData.items
+    : defaultItems;
+
   return (
     <Section id="problem" variant="alt">
       <div className="text-center mb-12">
         <Heading as="h2" className="mb-4">
-          {title}
+          {sectionTitle}
         </Heading>
-        <p className="text-[--text-secondary] max-w-2xl mx-auto">{subtitle}</p>
+        <p className="text-[var(--text-secondary)] max-w-2xl mx-auto">{sectionSubtitle}</p>
       </div>
 
-      <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {displayProblems.map((problem, index) => {
-          const Icon = problem.icon;
-          return (
-            <StaggerItem key={index}>
-              <Card
-                variant="default"
-                hoverEffect={true}
-                className="flex items-start gap-4 h-full"
-              >
-                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-[rgba(239,68,68,0.1)] flex items-center justify-center">
-                  <Icon className="w-6 h-6 text-[--accent-error]" />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="w-5 h-5 rounded-full bg-[--bg-elevated] flex items-center justify-center text-xs text-[--text-muted]">
-                      {index + 1}
-                    </span>
-                  </div>
-                  <p className="text-[--text-primary] leading-relaxed">{problem.text}</p>
-                </div>
-              </Card>
-            </StaggerItem>
-          );
-        })}
+      <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {items.map((item, index) => (
+          <StaggerItem key={index}>
+            <motion.div
+              className="group relative aspect-[4/3] rounded-xl overflow-hidden cursor-pointer"
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+            >
+              {/* Background Image */}
+              <div className="absolute inset-0">
+                {item.backgroundImageUrl ? (
+                  <Image
+                    src={item.backgroundImageUrl}
+                    alt={item.backgroundImageAlt || item.title}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-[var(--bg-elevated)] to-[var(--bg-secondary)]" />
+                )}
+              </div>
+
+              {/* Dark Overlay with Gradient */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/30 transition-opacity duration-300 group-hover:from-black/85 group-hover:via-black/55" />
+
+              {/* Content */}
+              <div className="absolute inset-0 flex flex-col justify-end p-5 md:p-6">
+                <h3 className="text-lg md:text-xl font-bold text-white mb-2 leading-tight">
+                  {item.title}
+                </h3>
+                <p className="text-sm md:text-base text-white/80 leading-relaxed line-clamp-2">
+                  {item.description}
+                </p>
+              </div>
+
+              {/* Subtle Border Glow on Hover */}
+              <div className="absolute inset-0 rounded-xl border border-white/0 transition-colors duration-300 group-hover:border-white/20" />
+            </motion.div>
+          </StaggerItem>
+        ))}
       </StaggerContainer>
 
       {/* Transition Text */}
@@ -104,11 +111,11 @@ export function Problem({
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.5 }}
         transition={{ duration: 0.6, delay: 0.3 }}
-        className="text-center mt-12 pt-12 border-t border-[--border-default]"
+        className="text-center mt-12 pt-12 border-t border-[var(--border-default)]"
       >
-        <p className="text-xl md:text-2xl text-[--text-secondary]">
+        <p className="text-xl md:text-2xl text-[var(--text-secondary)]">
           そのお悩み、
-          <span className="text-[--accent-primary] font-semibold">すべて解決</span>
+          <span className="text-[var(--accent-primary)] font-semibold">すべて解決</span>
           できます。
         </p>
       </motion.div>

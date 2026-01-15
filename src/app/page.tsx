@@ -16,7 +16,7 @@ import {
   queries,
   type SiteSettings,
   type HeroData,
-  type ProblemData,
+  type ProblemSectionData,
   type ReasonData,
   type CaseStudyData,
   type TestimonialData,
@@ -48,8 +48,8 @@ export default async function Home() {
       query: queries.hero,
       tags: ["hero"],
     }),
-    sanityFetch<ProblemData[]>({
-      query: queries.problems,
+    sanityFetch<ProblemSectionData>({
+      query: queries.problemSection,
       tags: ["problem"],
     }),
     sanityFetch<ReasonData[]>({
@@ -94,7 +94,7 @@ export default async function Home() {
           backgroundVideoUrl={heroData?.backgroundVideoUrl}
           youtubeUrl={heroData?.youtubeUrl}
         />
-        <Problem problemsData={problemsData} />
+        <Problem problemSectionData={problemsData} />
         <Reason reasonsData={reasonsData} />
         <CaseStudy caseStudiesData={caseStudiesData} />
         <Testimonials testimonialsData={testimonialsData} />

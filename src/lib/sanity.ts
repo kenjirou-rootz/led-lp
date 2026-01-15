@@ -54,11 +54,16 @@ export const queries = {
       "iconUrl": icon.asset->url
     }
   }`,
-  problems: `*[_type == "problem"] | order(order asc){
-    _id,
-    problemText,
-    "iconUrl": icon.asset->url,
-    order
+  problemSection: `*[_type == "problem"][0]{
+    sectionTitle,
+    sectionSubtitle,
+    transitionText,
+    "items": items[]{
+      title,
+      description,
+      "backgroundImageUrl": backgroundImage.asset->url,
+      "backgroundImageAlt": backgroundImage.alt
+    }
   }`,
   reasons: `*[_type == "reason"] | order(order asc){
     _id,
@@ -162,11 +167,18 @@ export interface HeroData {
   }>;
 }
 
-export interface ProblemData {
-  _id: string;
-  problemText: string;
-  iconUrl?: string;
-  order: number;
+export interface ProblemItemData {
+  title: string;
+  description: string;
+  backgroundImageUrl?: string;
+  backgroundImageAlt?: string;
+}
+
+export interface ProblemSectionData {
+  sectionTitle?: string;
+  sectionSubtitle?: string;
+  transitionText?: string;
+  items?: ProblemItemData[];
 }
 
 export interface ReasonData {
