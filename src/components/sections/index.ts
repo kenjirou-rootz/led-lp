@@ -1,0 +1,10 @@
+export { Hero } from "./Hero";
+export { Problem } from "./Problem";
+export { Reason } from "./Reason";
+export { CaseStudy } from "./CaseStudy";
+export { Testimonials } from "./Testimonials";
+export { ClientLogos } from "./ClientLogos";
+export { UseCases } from "./UseCases";
+export { Pricing } from "./Pricing";
+export { FAQ } from "./FAQ";
+export { CTA } from "./CTA";
