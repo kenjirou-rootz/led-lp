@@ -8,7 +8,10 @@ import { heroHeadline, heroSubheadline, heroCTA, heroBadges } from "@/lib/animat
 interface HeroProps {
   headline?: string;
   subheadline?: string;
-  videoUrl?: string;
+  backgroundType?: 'image' | 'video' | 'youtube';
+  backgroundImageUrl?: string;
+  backgroundVideoUrl?: string;
+  youtubeUrl?: string;
   posterUrl?: string;
 }
 
@@ -18,36 +21,82 @@ const trustBadges = [
   { icon: Users, label: "東証プライム上場", value: "企業含む50社以上と取引" },
 ];
 
+// YouTube URLからビデオIDを抽出
+function extractYouTubeId(url: string): string | null {
+  const regExp = /^.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+  return match && match[1].length === 11 ? match[1] : null;
+}
+
 export function Hero({
   headline = "展示会の成功を、映像演出で確実なものに。",
   subheadline = "業界15年・累計3,500件の実績。トラブル時も代替機即日対応で安心。",
-  videoUrl,
+  backgroundType = 'image',
+  backgroundImageUrl,
+  backgroundVideoUrl,
+  youtubeUrl,
   posterUrl = "/images/hero-poster.jpg",
 }: HeroProps) {
+  const youtubeId = youtubeUrl ? extractYouTubeId(youtubeUrl) : null;
+
+  // 背景コンテンツをレンダリング
+  const renderBackground = () => {
+    switch (backgroundType) {
+      case 'video':
+        if (backgroundVideoUrl) {
+          return (
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              poster={backgroundImageUrl || posterUrl}
+              className="w-full h-full object-cover"
+            >
+              <source src={backgroundVideoUrl} type="video/mp4" />
+            </video>
+          );
+        }
+        break;
+
+      case 'youtube':
+        if (youtubeId) {
+          return (
+            <div className="w-full h-full relative overflow-hidden">
+              <iframe
+                src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=1&loop=1&playlist=${youtubeId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1`}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[177.78vh] min-w-full h-[56.25vw] min-h-full"
+                style={{ border: 'none' }}
+              />
+            </div>
+          );
+        }
+        break;
+
+      case 'image':
+      default:
+        break;
+    }
+
+    // フォールバック: 画像表示
+    return (
+      <div
+        className="w-full h-full bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `url(${backgroundImageUrl || posterUrl})`,
+          backgroundColor: "var(--bg-secondary)",
+        }}
+      />
+    );
+  };
+
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden pointer-events-none">
-      {/* Video Background */}
+      {/* Background */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        {videoUrl ? (
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            poster={posterUrl}
-            className="w-full h-full object-cover"
-          >
-            <source src={videoUrl} type="video/mp4" />
-          </video>
-        ) : (
-          <div
-            className="w-full h-full bg-cover bg-center bg-no-repeat"
-            style={{
-              backgroundImage: `url(${posterUrl})`,
-              backgroundColor: "var(--bg-secondary)",
-            }}
-          />
-        )}
+        {renderBackground()}
         {/* Overlay */}
         <div className="video-overlay" />
         {/* Grid Pattern */}

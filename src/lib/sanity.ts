@@ -43,7 +43,10 @@ export const queries = {
   hero: `*[_type == "hero"][0]{
     headline,
     subHeadline,
+    backgroundType,
     "backgroundImageUrl": backgroundImage.asset->url,
+    "backgroundVideoUrl": backgroundVideo.asset->url,
+    youtubeUrl,
     ctaText,
     ctaLink,
     trustBadges[]{
@@ -147,7 +150,10 @@ export interface SiteSettings {
 export interface HeroData {
   headline?: string;
   subHeadline?: string;
+  backgroundType?: 'image' | 'video' | 'youtube';
   backgroundImageUrl?: string;
+  backgroundVideoUrl?: string;
+  youtubeUrl?: string;
   ctaText?: string;
   ctaLink?: string;
   trustBadges?: Array<{

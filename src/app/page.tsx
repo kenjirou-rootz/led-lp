@@ -89,7 +89,10 @@ export default async function Home() {
         <Hero
           headline={heroData?.headline}
           subheadline={heroData?.subHeadline}
-          posterUrl={heroData?.backgroundImageUrl}
+          backgroundType={heroData?.backgroundType}
+          backgroundImageUrl={heroData?.backgroundImageUrl}
+          backgroundVideoUrl={heroData?.backgroundVideoUrl}
+          youtubeUrl={heroData?.youtubeUrl}
         />
         <Problem problemsData={problemsData} />
         <Reason reasonsData={reasonsData} />
