@@ -11,9 +11,9 @@ interface SectionProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 const variantStyles = {
-  default: "bg-[--bg-primary]",
-  alt: "bg-[--bg-secondary]",
-  gradient: "bg-gradient-to-b from-[--bg-primary] to-[--bg-secondary]",
+  default: "bg-[var(--bg-primary)]",
+  alt: "bg-[var(--bg-secondary)]",
+  gradient: "bg-gradient-to-b from-[var(--bg-primary)] to-[var(--bg-secondary)]",
 };
 
 export const Section = forwardRef<HTMLElement, SectionProps>(
@@ -34,7 +34,7 @@ export const Section = forwardRef<HTMLElement, SectionProps>(
         ref={ref}
         id={id}
         className={`
-          ${noPadding ? "" : "py-[--section-padding]"}
+          ${noPadding ? "" : "py-[var(--section-padding)]"}
           ${variantStyles[variant]}
           ${className}
         `}

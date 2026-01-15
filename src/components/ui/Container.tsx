@@ -6,8 +6,8 @@ interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const sizeStyles = {
-  default: "max-w-[--container-max]",
-  narrow: "max-w-[--content-max]",
+  default: "max-w-[var(--container-max)]",
+  narrow: "max-w-[var(--content-max)]",
   wide: "max-w-[1440px]",
 };
 
@@ -21,7 +21,7 @@ export const Container = forwardRef<HTMLDivElement, ContainerProps>(
         ref={ref}
         className={`
           w-full mx-auto
-          px-[--container-padding]
+          px-[var(--container-padding)]
           ${sizeStyles[size]}
           ${className}
         `}
