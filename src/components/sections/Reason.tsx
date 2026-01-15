@@ -1,23 +1,17 @@
 "use client";
 
-import { Award, RefreshCw, PiggyBank } from "lucide-react";
+import { useCallback } from "react";
+import useEmblaCarousel from "embla-carousel-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import Image from "next/image";
 import { Section } from "@/components/layout";
-import { Heading, Card } from "@/components/ui";
-import { StaggerContainer, StaggerItem } from "@/components/animation";
-import { FadeInView } from "@/components/animation";
-import type { ReasonData } from "@/lib/sanity";
+import { Heading } from "@/components/ui";
+import { motion } from "motion/react";
+import type { ReasonSectionData, ReasonItemData } from "@/lib/sanity";
 
-interface ReasonItem {
-  icon: React.ComponentType<{ className?: string }>;
-  number: string;
-  title: string;
-  description: string;
-  highlights: string[];
-}
-
-const defaultReasons: ReasonItem[] = [
+// デフォルトのカードデータ（CMSデータがない場合）
+const defaultItems: ReasonItemData[] = [
   {
-    icon: Award,
     number: "01",
     title: "業界15年・累計3,500件の実績と信頼",
     description:
@@ -25,7 +19,6 @@ const defaultReasons: ReasonItem[] = [
     highlights: ["15年の実績", "3,500件以上", "上場企業50社以上"],
   },
   {
-    icon: RefreshCw,
     number: "02",
     title: "トラブル時の代替機即日対応",
     description:
@@ -33,7 +26,6 @@ const defaultReasons: ReasonItem[] = [
     highlights: ["即日対応", "24時間サポート", "豊富な在庫"],
   },
   {
-    icon: PiggyBank,
     number: "03",
     title: "予算に合わせた柔軟な提案",
     description:
@@ -42,104 +34,147 @@ const defaultReasons: ReasonItem[] = [
   },
 ];
 
-// デフォルトアイコンのマッピング
-const defaultIcons = [Award, RefreshCw, PiggyBank];
-
-// Portable Textからプレーンテキストを抽出
-function extractPlainText(blocks: unknown[]): string {
-  if (!blocks || !Array.isArray(blocks)) return "";
-  return blocks
-    .filter((block: unknown) => (block as { _type?: string })._type === "block")
-    .map((block: unknown) => {
-      const typedBlock = block as { children?: Array<{ text?: string }> };
-      return typedBlock.children?.map((child) => child.text || "").join("") || "";
-    })
-    .join("\n");
-}
-
 interface ReasonProps {
-  title?: string;
-  subtitle?: string;
-  reasons?: ReasonItem[];
-  reasonsData?: ReasonData[];
+  reasonSectionData?: ReasonSectionData | null;
 }
 
-export function Reason({
-  title = "選ばれる3つの理由",
-  subtitle = "私たちが選ばれ続けるのには、理由があります。",
-  reasons = defaultReasons,
-  reasonsData,
-}: ReasonProps) {
-  // CMSデータがある場合はそちらを使用
-  const displayReasons = reasonsData && reasonsData.length > 0
-    ? reasonsData.map((r, index) => ({
-        icon: defaultIcons[index % defaultIcons.length],
-        number: String(index + 1).padStart(2, "0"),
-        title: r.title,
-        description: extractPlainText(r.description || []),
-        highlights: [] as string[], // CMSからはハイライトは取得しない（シンプル化）
-      }))
-    : reasons;
+export function Reason({ reasonSectionData }: ReasonProps) {
+  const sectionTitle = reasonSectionData?.sectionTitle || "選ばれる3つの理由";
+  const sectionSubtitle =
+    reasonSectionData?.sectionSubtitle ||
+    "私たちが選ばれ続けるのには、理由があります。";
+  const items =
+    reasonSectionData?.items && reasonSectionData.items.length > 0
+      ? reasonSectionData.items
+      : defaultItems;
+
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    align: "start",
+    slidesToScroll: 1,
+    containScroll: "trimSnaps",
+    breakpoints: {
+      "(min-width: 768px)": { slidesToScroll: 2 },
+      "(min-width: 1024px)": { slidesToScroll: 3 },
+    },
+  });
+
+  const scrollPrev = useCallback(() => {
+    if (emblaApi) emblaApi.scrollPrev();
+  }, [emblaApi]);
+
+  const scrollNext = useCallback(() => {
+    if (emblaApi) emblaApi.scrollNext();
+  }, [emblaApi]);
+
   return (
     <Section id="reason" variant="default">
       <div className="text-center mb-12">
         <Heading as="h2" gradient className="mb-4">
-          {title}
+          {sectionTitle}
         </Heading>
-        <p className="text-[--text-secondary] max-w-2xl mx-auto">{subtitle}</p>
+        <p className="text-[var(--text-secondary)] max-w-2xl mx-auto">
+          {sectionSubtitle}
+        </p>
       </div>
 
-      <StaggerContainer speed="slow" className="space-y-8">
-        {displayReasons.map((reason, index) => {
-          const Icon = reason.icon;
-          const isEven = index % 2 === 1;
+      {/* Carousel Container */}
+      <div className="relative">
+        {/* Navigation Buttons */}
+        <button
+          onClick={scrollPrev}
+          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-12 h-12 rounded-full bg-[var(--bg-elevated)] border border-[var(--border-default)] flex items-center justify-center text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--accent-primary)] transition-all duration-300 shadow-lg hidden md:flex"
+          aria-label="前へ"
+        >
+          <ChevronLeft className="w-6 h-6" />
+        </button>
 
-          return (
-            <StaggerItem key={index}>
-              <Card
-                variant="glow"
-                hoverEffect={false}
-                className={`
-                  flex flex-col lg:flex-row gap-8 items-center
-                  ${isEven ? "lg:flex-row-reverse" : ""}
-                `}
+        <button
+          onClick={scrollNext}
+          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-12 h-12 rounded-full bg-[var(--bg-elevated)] border border-[var(--border-default)] flex items-center justify-center text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--accent-primary)] transition-all duration-300 shadow-lg hidden md:flex"
+          aria-label="次へ"
+        >
+          <ChevronRight className="w-6 h-6" />
+        </button>
+
+        {/* Embla Carousel */}
+        <div className="overflow-hidden" ref={emblaRef}>
+          <div className="flex gap-5">
+            {items.map((item, index) => (
+              <motion.div
+                key={index}
+                className="flex-[0_0_100%] min-w-0 md:flex-[0_0_calc(50%-10px)] lg:flex-[0_0_calc(33.333%-14px)]"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
               >
-                {/* Icon Side */}
-                <div className="flex-shrink-0">
-                  <div className="relative">
-                    <div className="w-24 h-24 md:w-32 md:h-32 rounded-2xl bg-gradient-to-br from-[--accent-primary] to-[--accent-secondary] flex items-center justify-center glow-blue">
-                      <Icon className="w-12 h-12 md:w-16 md:h-16 text-white" />
+                <div className="group relative h-full rounded-2xl bg-[var(--bg-elevated)] border border-[var(--border-default)] overflow-hidden transition-all duration-300 hover:border-[var(--accent-primary)] hover:shadow-xl hover:shadow-[var(--accent-primary)]/10">
+                  {/* Card Image */}
+                  <div className="relative aspect-[16/10] overflow-hidden">
+                    {item.imageUrl ? (
+                      <Image
+                        src={item.imageUrl}
+                        alt={item.imageAlt || item.title}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-[var(--accent-primary)]/20 to-[var(--accent-secondary)]/20 flex items-center justify-center">
+                        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-secondary)] flex items-center justify-center">
+                          <span className="text-2xl font-bold text-white">
+                            {item.number}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                    {/* Number Badge */}
+                    <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-[var(--accent-primary)] text-white text-sm font-bold shadow-lg">
+                      {item.number}
                     </div>
-                    <span className="absolute -top-3 -left-3 w-10 h-10 rounded-full bg-[--bg-primary] border-2 border-[--accent-primary] flex items-center justify-center text-[--accent-primary] font-bold text-sm">
-                      {reason.number}
-                    </span>
                   </div>
-                </div>
 
-                {/* Content Side */}
-                <div className="flex-1 text-center lg:text-left">
-                  <h3 className="text-[--text-h3] font-bold text-[--text-primary] mb-4">
-                    {reason.title}
-                  </h3>
-                  <p className="text-[--text-secondary] mb-6 leading-relaxed">
-                    {reason.description}
-                  </p>
-                  <div className="flex flex-wrap justify-center lg:justify-start gap-3">
-                    {reason.highlights.map((highlight, hIndex) => (
-                      <span
-                        key={hIndex}
-                        className="px-4 py-2 rounded-full bg-[--bg-elevated] text-sm text-[--text-secondary] border border-[--border-default]"
-                      >
-                        {highlight}
-                      </span>
-                    ))}
+                  {/* Card Content */}
+                  <div className="p-6">
+                    <h3 className="text-lg md:text-xl font-bold text-[var(--text-primary)] mb-3 line-clamp-2">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm md:text-base text-[var(--text-secondary)] mb-4 line-clamp-3 leading-relaxed">
+                      {item.description}
+                    </p>
+
+                    {/* Highlights */}
+                    {item.highlights && item.highlights.length > 0 && (
+                      <div className="flex flex-wrap gap-2">
+                        {item.highlights.map((highlight, hIndex) => (
+                          <span
+                            key={hIndex}
+                            className="px-3 py-1 text-xs rounded-full bg-[var(--bg-secondary)] text-[var(--text-secondary)] border border-[var(--border-default)]"
+                          >
+                            {highlight}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
-              </Card>
-            </StaggerItem>
-          );
-        })}
-      </StaggerContainer>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* Mobile Navigation Dots */}
+        <div className="flex justify-center gap-2 mt-6 md:hidden">
+          {items.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => emblaApi?.scrollTo(index)}
+              className="w-2 h-2 rounded-full bg-[var(--border-default)] hover:bg-[var(--accent-primary)] transition-colors"
+              aria-label={`スライド ${index + 1}`}
+            />
+          ))}
+        </div>
+      </div>
     </Section>
   );
 }

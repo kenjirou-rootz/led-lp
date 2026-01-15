@@ -65,14 +65,17 @@ export const queries = {
       "backgroundImageAlt": backgroundImage.alt
     }
   }`,
-  reasons: `*[_type == "reason"] | order(order asc){
-    _id,
-    title,
-    description,
-    "iconUrl": icon.asset->url,
-    "imageUrl": image.asset->url,
-    "imageAlt": image.alt,
-    order
+  reasonSection: `*[_type == "reason"][0]{
+    sectionTitle,
+    sectionSubtitle,
+    "items": items[]{
+      number,
+      title,
+      description,
+      "imageUrl": image.asset->url,
+      "imageAlt": image.alt,
+      highlights
+    }
   }`,
   caseStudies: `*[_type == "caseStudy"] | order(order asc){
     _id,
@@ -181,14 +184,19 @@ export interface ProblemSectionData {
   items?: ProblemItemData[];
 }
 
-export interface ReasonData {
-  _id: string;
+export interface ReasonItemData {
+  number: string;
   title: string;
-  description?: unknown[]; // Portable Text blocks
-  iconUrl?: string;
+  description: string;
   imageUrl?: string;
   imageAlt?: string;
-  order: number;
+  highlights?: string[];
+}
+
+export interface ReasonSectionData {
+  sectionTitle?: string;
+  sectionSubtitle?: string;
+  items?: ReasonItemData[];
 }
 
 export interface CaseStudyData {
