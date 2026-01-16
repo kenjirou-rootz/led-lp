@@ -1,10 +1,26 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, Phone, Mail, Clock, Loader2, CheckCircle, AlertCircle } from "lucide-react";
+import { motion } from "motion/react";
+import {
+  ArrowRight,
+  Phone,
+  Mail,
+  Clock,
+  Loader2,
+  CheckCircle,
+  AlertCircle,
+  Send,
+  Zap,
+} from "lucide-react";
 import { Section } from "@/components/layout";
-import { Heading, Button, Card } from "@/components/ui";
-import { FadeInView } from "@/components/animation";
+import { Button } from "@/components/ui";
+import {
+  sectionHeader,
+  sectionOverline,
+  sectionTitle,
+  sectionSubtitle,
+} from "@/lib/animations";
 import { contactSchema, type ContactFormData } from "@/lib/validations/contact";
 import type { SiteSettings } from "@/lib/sanity";
 
@@ -97,251 +113,344 @@ export function CTA({
 
   const getFieldClassName = (fieldName: keyof FieldErrors) => {
     const baseClass =
-      "w-full px-4 py-3 bg-[--bg-elevated] border rounded-lg text-[--text-primary] placeholder-[--text-muted] focus:outline-none transition-colors";
+      "w-full px-4 py-3.5 bg-[var(--bg-elevated)] border rounded-xl text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none transition-all duration-300 font-sans";
     const hasError = fieldErrors[fieldName]?.length;
     return `${baseClass} ${
       hasError
-        ? "border-[--accent-error] focus:border-[--accent-error]"
-        : "border-[--border-default] focus:border-[--border-focus]"
+        ? "border-[var(--accent-error)] focus:border-[var(--accent-error)] focus:shadow-[0_0_20px_rgba(239,68,68,0.15)]"
+        : "border-[var(--border-default)] focus:border-[var(--accent-primary)] focus:shadow-[0_0_20px_rgba(0,240,255,0.15)]"
     }`;
   };
 
   return (
-    <Section id="cta" variant="gradient" className="relative overflow-hidden">
-      {/* Background Glow Effects */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-[radial-gradient(circle,rgba(59,130,246,0.15)_0%,transparent_60%)]" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[radial-gradient(circle,rgba(139,92,246,0.15)_0%,transparent_60%)]" />
+    <Section id="cta" variant="spotlight" className="relative overflow-hidden">
+      {/* Background Effects */}
+      <div className="absolute inset-0 bg-pixel-grid opacity-20 pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[200%] h-[60%] bg-[radial-gradient(ellipse_at_50%_0%,rgba(255,107,0,0.08)_0%,transparent_50%)] pointer-events-none" />
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[200%] h-[60%] bg-[radial-gradient(ellipse_at_50%_100%,rgba(0,240,255,0.06)_0%,transparent_50%)] pointer-events-none" />
+
+      {/* Decorative LED Lines */}
+      <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[var(--accent-cta)]/40 to-transparent" />
 
       <div className="relative z-10">
-        <FadeInView className="text-center mb-12">
-          <Heading as="h2" gradient animateOnScroll={false} className="mb-4">
-            {headline}
-          </Heading>
-          <p className="text-[--text-secondary] max-w-2xl mx-auto text-lg">
+        {/* Section Header */}
+        <motion.div
+          variants={sectionHeader}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          className="text-center mb-14"
+        >
+          {/* Overline */}
+          <motion.div variants={sectionOverline} className="mb-4">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--accent-cta-muted)] border border-[rgba(255,107,0,0.3)]">
+              <Send className="w-3.5 h-3.5 text-[var(--accent-cta)]" />
+              <span className="font-display text-[10px] font-semibold tracking-[0.2em] uppercase text-[var(--accent-cta)]">
+                Contact Us
+              </span>
+            </span>
+          </motion.div>
+
+          {/* Title */}
+          <motion.h2 variants={sectionTitle} className="section-title">
+            <span className="text-gradient-orange">{headline.slice(0, 4)}</span>
+            <span>{headline.slice(4)}</span>
+          </motion.h2>
+
+          {/* Subtitle */}
+          <motion.p
+            variants={sectionSubtitle}
+            className="mt-4 section-subtitle max-w-2xl mx-auto"
+          >
             {subheadline}
-          </p>
-        </FadeInView>
+          </motion.p>
+        </motion.div>
 
-        <FadeInView delay={0.2}>
-          <Card variant="glow" hoverEffect={false} className="max-w-4xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-8">
-              {/* Contact Form */}
-              <div>
-                <h3 className="text-lg font-semibold text-[--text-primary] mb-6">
-                  お問い合わせフォーム
-                </h3>
+        {/* Main Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.2, ease: [0.19, 1, 0.22, 1] }}
+          className="max-w-5xl mx-auto"
+        >
+          <div className="relative rounded-2xl bg-[var(--bg-card)] border border-[var(--accent-cta)]/30 overflow-hidden shadow-[0_0_60px_rgba(255,107,0,0.1)]">
+            {/* Card Top Glow Line */}
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[var(--accent-cta)] to-transparent" />
 
-                {status === "success" ? (
-                  <div className="flex flex-col items-center justify-center py-12 text-center">
-                    <div className="w-16 h-16 rounded-full bg-[rgba(34,197,94,0.1)] flex items-center justify-center mb-4">
-                      <CheckCircle className="w-8 h-8 text-[--accent-success]" />
+            {/* Card Inner Glow */}
+            <div className="absolute inset-0 bg-gradient-to-b from-[rgba(255,107,0,0.03)] to-transparent pointer-events-none" />
+
+            <div className="p-8 md:p-10">
+              <div className="grid md:grid-cols-2 gap-10">
+                {/* Contact Form */}
+                <div>
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 rounded-xl bg-[var(--accent-cta)]/10 border border-[var(--accent-cta)]/30 flex items-center justify-center">
+                      <Zap className="w-5 h-5 text-[var(--accent-cta)]" />
                     </div>
-                    <h4 className="text-xl font-semibold text-[--text-primary] mb-2">
-                      お問い合わせありがとうございます
-                    </h4>
-                    <p className="text-[--text-secondary] mb-6">
-                      通常1営業日以内にご返信いたします。
-                    </p>
-                    <button
-                      onClick={() => setStatus("idle")}
-                      className="text-[--accent-primary] hover:underline"
-                    >
-                      新しいお問い合わせ
-                    </button>
+                    <h3 className="font-display text-lg font-bold text-[var(--text-primary)] tracking-wide">
+                      お問い合わせフォーム
+                    </h3>
                   </div>
-                ) : (
-                  <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                      <label
-                        htmlFor="companyName"
-                        className="block text-sm text-[--text-secondary] mb-2"
-                      >
-                        会社名
-                      </label>
-                      <input
-                        type="text"
-                        id="companyName"
-                        name="companyName"
-                        value={formData.companyName}
-                        onChange={handleChange}
-                        className={getFieldClassName("companyName")}
-                        placeholder="株式会社○○"
-                        disabled={status === "submitting"}
-                      />
-                      {fieldErrors.companyName && (
-                        <p className="mt-1 text-sm text-[--accent-error]">
-                          {fieldErrors.companyName[0]}
-                        </p>
-                      )}
-                    </div>
 
-                    <div>
-                      <label
-                        htmlFor="name"
-                        className="block text-sm text-[--text-secondary] mb-2"
-                      >
-                        お名前 <span className="text-[--accent-error]">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        className={getFieldClassName("name")}
-                        placeholder="山田 太郎"
-                        disabled={status === "submitting"}
-                      />
-                      {fieldErrors.name && (
-                        <p className="mt-1 text-sm text-[--accent-error]">
-                          {fieldErrors.name[0]}
-                        </p>
-                      )}
-                    </div>
-
-                    <div>
-                      <label
-                        htmlFor="email"
-                        className="block text-sm text-[--text-secondary] mb-2"
-                      >
-                        メールアドレス{" "}
-                        <span className="text-[--accent-error]">*</span>
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        className={getFieldClassName("email")}
-                        placeholder="email@example.com"
-                        disabled={status === "submitting"}
-                      />
-                      {fieldErrors.email && (
-                        <p className="mt-1 text-sm text-[--accent-error]">
-                          {fieldErrors.email[0]}
-                        </p>
-                      )}
-                    </div>
-
-                    <div>
-                      <label
-                        htmlFor="message"
-                        className="block text-sm text-[--text-secondary] mb-2"
-                      >
-                        ご相談内容
-                      </label>
-                      <textarea
-                        id="message"
-                        name="message"
-                        rows={4}
-                        value={formData.message}
-                        onChange={handleChange}
-                        className={`${getFieldClassName("message")} resize-none`}
-                        placeholder="ご利用予定日、規模、ご予算など"
-                        disabled={status === "submitting"}
-                      />
-                      {fieldErrors.message && (
-                        <p className="mt-1 text-sm text-[--accent-error]">
-                          {fieldErrors.message[0]}
-                        </p>
-                      )}
-                    </div>
-
-                    {status === "error" && errorMessage && (
-                      <div className="flex items-center gap-2 p-3 bg-[rgba(239,68,68,0.1)] border border-[--accent-error] rounded-lg">
-                        <AlertCircle className="w-5 h-5 text-[--accent-error] flex-shrink-0" />
-                        <p className="text-sm text-[--accent-error]">
-                          {errorMessage}
-                        </p>
+                  {status === "success" ? (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="flex flex-col items-center justify-center py-12 text-center"
+                    >
+                      <div className="relative mb-6">
+                        <div className="w-20 h-20 rounded-full bg-[var(--accent-success)]/10 border border-[var(--accent-success)]/30 flex items-center justify-center">
+                          <CheckCircle className="w-10 h-10 text-[var(--accent-success)]" />
+                        </div>
+                        {/* Success glow effect */}
+                        <div className="absolute inset-0 rounded-full bg-[var(--accent-success)]/20 blur-xl" />
                       </div>
-                    )}
-
-                    <Button
-                      type="submit"
-                      className="w-full"
-                      disabled={status === "submitting"}
-                      rightIcon={
-                        status === "submitting" ? (
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                        ) : (
-                          <ArrowRight className="w-4 h-4" />
-                        )
-                      }
-                    >
-                      {status === "submitting" ? "送信中..." : "無料で相談する"}
-                    </Button>
-                  </form>
-                )}
-              </div>
-
-              {/* Contact Info */}
-              <div className="flex flex-col">
-                <h3 className="text-lg font-semibold text-[--text-primary] mb-6">
-                  お電話・メールでも
-                </h3>
-
-                <div className="space-y-6 flex-1">
-                  {/* Phone */}
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-[rgba(59,130,246,0.1)] flex items-center justify-center flex-shrink-0">
-                      <Phone className="w-5 h-5 text-[--accent-primary]" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-[--text-muted] uppercase tracking-wide mb-1">
-                        お電話
+                      <h4 className="font-display text-xl font-bold text-[var(--text-primary)] mb-2 tracking-wide">
+                        お問い合わせありがとうございます
+                      </h4>
+                      <p className="text-[var(--text-secondary)] mb-6">
+                        通常1営業日以内にご返信いたします。
                       </p>
-                      <a
-                        href={`tel:${displayPhone.replace(/-/g, "")}`}
-                        className="text-xl font-bold text-[--text-primary] hover:text-[--accent-primary] transition-colors"
+                      <button
+                        onClick={() => setStatus("idle")}
+                        className="text-[var(--accent-primary)] hover:text-[var(--accent-primary-hover)] font-medium transition-colors"
                       >
-                        {displayPhone}
-                      </a>
-                      <p className="text-sm text-[--text-muted] flex items-center gap-1 mt-1">
-                        <Clock className="w-3 h-3" />
-                        {phoneNote}
-                      </p>
-                    </div>
-                  </div>
+                        新しいお問い合わせ
+                      </button>
+                    </motion.div>
+                  ) : (
+                    <form onSubmit={handleSubmit} className="space-y-5">
+                      <div>
+                        <label
+                          htmlFor="companyName"
+                          className="block text-sm font-medium text-[var(--text-secondary)] mb-2"
+                        >
+                          会社名
+                        </label>
+                        <input
+                          type="text"
+                          id="companyName"
+                          name="companyName"
+                          value={formData.companyName}
+                          onChange={handleChange}
+                          className={getFieldClassName("companyName")}
+                          placeholder="株式会社○○"
+                          disabled={status === "submitting"}
+                        />
+                        {fieldErrors.companyName && (
+                          <p className="mt-1.5 text-sm text-[var(--accent-error)]">
+                            {fieldErrors.companyName[0]}
+                          </p>
+                        )}
+                      </div>
 
-                  {/* Email */}
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-[rgba(139,92,246,0.1)] flex items-center justify-center flex-shrink-0">
-                      <Mail className="w-5 h-5 text-[--accent-secondary]" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-[--text-muted] uppercase tracking-wide mb-1">
-                        メール
-                      </p>
-                      <a
-                        href={`mailto:${displayEmail}`}
-                        className="text-lg font-semibold text-[--text-primary] hover:text-[--accent-secondary] transition-colors"
+                      <div>
+                        <label
+                          htmlFor="name"
+                          className="block text-sm font-medium text-[var(--text-secondary)] mb-2"
+                        >
+                          お名前{" "}
+                          <span className="text-[var(--accent-cta)]">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          id="name"
+                          name="name"
+                          value={formData.name}
+                          onChange={handleChange}
+                          className={getFieldClassName("name")}
+                          placeholder="山田 太郎"
+                          disabled={status === "submitting"}
+                        />
+                        {fieldErrors.name && (
+                          <p className="mt-1.5 text-sm text-[var(--accent-error)]">
+                            {fieldErrors.name[0]}
+                          </p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label
+                          htmlFor="email"
+                          className="block text-sm font-medium text-[var(--text-secondary)] mb-2"
+                        >
+                          メールアドレス{" "}
+                          <span className="text-[var(--accent-cta)]">*</span>
+                        </label>
+                        <input
+                          type="email"
+                          id="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleChange}
+                          className={getFieldClassName("email")}
+                          placeholder="email@example.com"
+                          disabled={status === "submitting"}
+                        />
+                        {fieldErrors.email && (
+                          <p className="mt-1.5 text-sm text-[var(--accent-error)]">
+                            {fieldErrors.email[0]}
+                          </p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label
+                          htmlFor="message"
+                          className="block text-sm font-medium text-[var(--text-secondary)] mb-2"
+                        >
+                          ご相談内容
+                        </label>
+                        <textarea
+                          id="message"
+                          name="message"
+                          rows={4}
+                          value={formData.message}
+                          onChange={handleChange}
+                          className={`${getFieldClassName("message")} resize-none`}
+                          placeholder="ご利用予定日、規模、ご予算など"
+                          disabled={status === "submitting"}
+                        />
+                        {fieldErrors.message && (
+                          <p className="mt-1.5 text-sm text-[var(--accent-error)]">
+                            {fieldErrors.message[0]}
+                          </p>
+                        )}
+                      </div>
+
+                      {status === "error" && errorMessage && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="flex items-center gap-3 p-4 bg-[var(--accent-error)]/10 border border-[var(--accent-error)]/30 rounded-xl"
+                        >
+                          <AlertCircle className="w-5 h-5 text-[var(--accent-error)] flex-shrink-0" />
+                          <p className="text-sm text-[var(--accent-error)]">
+                            {errorMessage}
+                          </p>
+                        </motion.div>
+                      )}
+
+                      <Button
+                        type="submit"
+                        variant="primary"
+                        className="w-full bg-[var(--accent-cta)] hover:bg-[var(--accent-cta-hover)] shadow-[var(--glow-orange)] group"
+                        disabled={status === "submitting"}
+                        rightIcon={
+                          status === "submitting" ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          ) : (
+                            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                          )
+                        }
                       >
-                        {displayEmail}
-                      </a>
-                      <p className="text-sm text-[--text-muted] mt-1">
-                        24時間受付
-                      </p>
-                    </div>
-                  </div>
+                        {status === "submitting" ? "送信中..." : "無料で相談する"}
+                      </Button>
+                    </form>
+                  )}
                 </div>
 
-                {/* Quick Response Promise */}
-                <div className="mt-auto pt-6 border-t border-[--border-default]">
-                  <div className="bg-[--bg-elevated] rounded-lg p-4">
-                    <p className="text-sm text-[--text-secondary]">
-                      <span className="text-[--accent-success] font-semibold">
-                        通常1営業日以内
-                      </span>
-                      にご返信いたします。
-                      お急ぎの場合はお電話ください。
-                    </p>
+                {/* Contact Info */}
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 rounded-xl bg-[var(--accent-primary)]/10 border border-[var(--accent-primary)]/30 flex items-center justify-center">
+                      <Phone className="w-5 h-5 text-[var(--accent-primary)]" />
+                    </div>
+                    <h3 className="font-display text-lg font-bold text-[var(--text-primary)] tracking-wide">
+                      お電話・メールでも
+                    </h3>
                   </div>
+
+                  <div className="space-y-6 flex-1">
+                    {/* Phone */}
+                    <motion.div
+                      initial={{ opacity: 0, x: 20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.3 }}
+                      className="group flex items-start gap-4 p-5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-default)] transition-all duration-300 hover:border-[var(--accent-primary)]/40 hover:shadow-[var(--glow-card-hover)]"
+                    >
+                      <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-primary)]/60 flex items-center justify-center flex-shrink-0 shadow-[var(--glow-cyan-subtle)]">
+                        <Phone className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <p className="font-display text-[10px] text-[var(--text-muted)] uppercase tracking-[0.15em] mb-1">
+                          Telephone
+                        </p>
+                        <a
+                          href={`tel:${displayPhone.replace(/-/g, "")}`}
+                          className="font-display text-2xl font-bold text-[var(--text-primary)] hover:text-[var(--accent-primary)] transition-colors tracking-wide"
+                        >
+                          {displayPhone}
+                        </a>
+                        <p className="text-sm text-[var(--text-muted)] flex items-center gap-1.5 mt-2">
+                          <Clock className="w-3.5 h-3.5" />
+                          {phoneNote}
+                        </p>
+                      </div>
+                    </motion.div>
+
+                    {/* Email */}
+                    <motion.div
+                      initial={{ opacity: 0, x: 20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.4 }}
+                      className="group flex items-start gap-4 p-5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-default)] transition-all duration-300 hover:border-[var(--accent-cta)]/40 hover:shadow-[0_0_30px_rgba(255,107,0,0.1)]"
+                    >
+                      <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[var(--accent-cta)] to-[var(--accent-cta)]/60 flex items-center justify-center flex-shrink-0 shadow-[var(--glow-orange)]">
+                        <Mail className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <p className="font-display text-[10px] text-[var(--text-muted)] uppercase tracking-[0.15em] mb-1">
+                          Email
+                        </p>
+                        <a
+                          href={`mailto:${displayEmail}`}
+                          className="font-display text-lg font-bold text-[var(--text-primary)] hover:text-[var(--accent-cta)] transition-colors tracking-wide break-all"
+                        >
+                          {displayEmail}
+                        </a>
+                        <p className="text-sm text-[var(--text-muted)] mt-2">
+                          24時間受付
+                        </p>
+                      </div>
+                    </motion.div>
+                  </div>
+
+                  {/* Quick Response Promise */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.5 }}
+                    className="mt-6 pt-6 border-t border-[var(--border-default)]"
+                  >
+                    <div className="relative rounded-xl bg-gradient-to-r from-[var(--accent-success)]/5 to-transparent border border-[var(--accent-success)]/20 p-5 overflow-hidden">
+                      {/* Decorative corner */}
+                      <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-[var(--accent-success)]/10 to-transparent" />
+                      <div className="flex items-start gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-[var(--accent-success)]/20 flex items-center justify-center flex-shrink-0">
+                          <CheckCircle className="w-4 h-4 text-[var(--accent-success)]" />
+                        </div>
+                        <p className="text-sm text-[var(--text-secondary)]">
+                          <span className="text-[var(--accent-success)] font-display font-bold">
+                            通常1営業日以内
+                          </span>
+                          にご返信いたします。
+                          <br />
+                          お急ぎの場合はお電話ください。
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
                 </div>
               </div>
             </div>
-          </Card>
-        </FadeInView>
+          </div>
+        </motion.div>
       </div>
     </Section>
   );

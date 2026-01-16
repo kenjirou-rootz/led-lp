@@ -1,22 +1,36 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { Noto_Sans_JP } from "next/font/google";
+import { Orbitron, Outfit, Noto_Sans_JP, Noto_Serif_JP } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Display font - Futuristic, geometric, LED-inspired
+// Orbitron evokes digital displays and sci-fi interfaces
+const orbitron = Orbitron({
+  variable: "--font-display",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+// Body font - Distinctive geometric sans with excellent readability
+// Outfit: modern, geometric yet warm, avoids generic AI aesthetics
+const outfit = Outfit({
+  variable: "--font-body",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
 });
 
+// Japanese support - Sans-serif
 const notoSansJP = Noto_Sans_JP({
-  variable: "--font-noto-sans-jp",
+  variable: "--font-japanese",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+});
+
+// Japanese Mincho (Serif) - For section titles
+// 明朝体: elegant, traditional, authoritative for headlines
+const notoSerifJP = Noto_Serif_JP({
+  variable: "--font-mincho",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "900"],
 });
 
 export const metadata: Metadata = {
@@ -48,7 +62,7 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${notoSansJP.variable} antialiased`}
+        className={`${orbitron.variable} ${outfit.variable} ${notoSansJP.variable} ${notoSerifJP.variable} antialiased`}
       >
         {children}
       </body>

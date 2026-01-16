@@ -5,7 +5,7 @@ import { Container } from "@/components/ui";
 
 interface SectionProps extends React.HTMLAttributes<HTMLElement> {
   id?: string;
-  variant?: "default" | "alt" | "gradient";
+  variant?: "default" | "alt" | "gradient" | "spotlight" | "grid";
   containerSize?: "default" | "narrow" | "wide";
   noPadding?: boolean;
 }
@@ -14,6 +14,8 @@ const variantStyles = {
   default: "bg-[var(--bg-primary)]",
   alt: "bg-[var(--bg-secondary)]",
   gradient: "bg-gradient-to-b from-[var(--bg-primary)] to-[var(--bg-secondary)]",
+  spotlight: "bg-[var(--bg-primary)] bg-spotlight",
+  grid: "bg-[var(--bg-secondary)] bg-pixel-grid",
 };
 
 export const Section = forwardRef<HTMLElement, SectionProps>(
@@ -34,7 +36,8 @@ export const Section = forwardRef<HTMLElement, SectionProps>(
         ref={ref}
         id={id}
         className={`
-          ${noPadding ? "" : "py-[var(--section-padding)]"}
+          relative
+          ${noPadding ? "" : "py-[var(--section-padding-y)]"}
           ${variantStyles[variant]}
           ${className}
         `}

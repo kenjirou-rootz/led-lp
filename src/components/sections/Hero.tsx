@@ -1,24 +1,32 @@
 "use client";
 
 import { motion } from "motion/react";
-import { Play, ArrowRight, Shield, Users, Clock } from "lucide-react";
-import { Container, Button, Badge } from "@/components/ui";
-import { heroHeadline, heroSubheadline, heroCTA, heroBadges } from "@/lib/animations";
+import { ArrowRight, Zap, Shield, TrendingUp } from "lucide-react";
+import { Container, Button } from "@/components/ui";
+import {
+  heroOverline,
+  heroHeadline,
+  heroSubheadline,
+  heroCTA,
+  heroStats,
+  heroStatItem,
+} from "@/lib/animations";
 
 interface HeroProps {
   headline?: string;
   subheadline?: string;
-  backgroundType?: 'image' | 'video' | 'youtube';
+  backgroundType?: "image" | "video" | "youtube";
   backgroundImageUrl?: string;
   backgroundVideoUrl?: string;
   youtubeUrl?: string;
   posterUrl?: string;
 }
 
-const trustBadges = [
-  { icon: Clock, label: "累計3,500件", value: "の実績" },
-  { icon: Shield, label: "代替機即日対応", value: "で安心" },
-  { icon: Users, label: "東証プライム上場", value: "企業含む50社以上と取引" },
+// Stats data - LED themed metrics
+const heroMetrics = [
+  { value: "15", suffix: "年", label: "業界実績", icon: TrendingUp },
+  { value: "3,500", suffix: "件+", label: "累計案件", icon: Zap },
+  { value: "50", suffix: "社+", label: "取引企業", icon: Shield },
 ];
 
 // YouTube URLからビデオIDを抽出
@@ -29,9 +37,9 @@ function extractYouTubeId(url: string): string | null {
 }
 
 export function Hero({
-  headline = "展示会の成功を、映像演出で確実なものに。",
-  subheadline = "業界15年・累計3,500件の実績。トラブル時も代替機即日対応で安心。",
-  backgroundType = 'image',
+  headline = "イベントの成功は映像演出で決まる。、映像演出で確実なものに。",
+  subheadline = "業界15年・累計3,500件の実績。確実に成功へ導く映像のプロ集団",
+  backgroundType = "image",
   backgroundImageUrl,
   backgroundVideoUrl,
   youtubeUrl,
@@ -42,7 +50,7 @@ export function Hero({
   // 背景コンテンツをレンダリング
   const renderBackground = () => {
     switch (backgroundType) {
-      case 'video':
+      case "video":
         if (backgroundVideoUrl) {
           return (
             <video
@@ -59,7 +67,7 @@ export function Hero({
         }
         break;
 
-      case 'youtube':
+      case "youtube":
         if (youtubeId) {
           return (
             <div className="w-full h-full relative overflow-hidden">
@@ -68,14 +76,14 @@ export function Hero({
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[177.78vh] min-w-full h-[56.25vw] min-h-full"
-                style={{ border: 'none' }}
+                style={{ border: "none" }}
               />
             </div>
           );
         }
         break;
 
-      case 'image':
+      case "image":
       default:
         break;
     }
@@ -92,32 +100,74 @@ export function Hero({
     );
   };
 
+  // Split headline for styled rendering
+  const headlineParts = headline.split("、");
+
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden pointer-events-none">
-      {/* Background */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
+    <section className="relative min-h-screen flex items-center overflow-hidden">
+      {/* ===== Background Layers ===== */}
+      <div className="absolute inset-0 z-0">
+        {/* Base Background (Video/Image) */}
         {renderBackground()}
-        {/* Overlay */}
-        <div className="video-overlay" />
-        {/* Grid Pattern */}
-        <div className="absolute inset-0 bg-grid opacity-30" />
-        {/* Glow Effect */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[radial-gradient(circle,rgba(59,130,246,0.1)_0%,transparent_60%)]" />
+
+        {/* Dark Overlay with gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-primary)]/60 via-[var(--bg-primary)]/80 to-[var(--bg-primary)]" />
+
+        {/* LED Pixel Grid Pattern */}
+        <div className="absolute inset-0 bg-pixel-grid opacity-40" />
+
+        {/* Scanline Effect */}
+        <div className="absolute inset-0 scanline-overlay opacity-30" />
+
+        {/* Spotlight from top center - Orange themed */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[200%] h-[80%] bg-[radial-gradient(ellipse_at_50%_0%,rgba(255,107,0,0.15)_0%,transparent_60%)]" />
+
+        {/* Secondary glow - bottom accent with warm orange */}
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[150%] h-[40%] bg-[radial-gradient(ellipse_at_50%_100%,rgba(255,149,0,0.1)_0%,transparent_60%)]" />
+
+        {/* Subtle side glows */}
+        <div className="absolute top-1/3 left-0 w-[30%] h-[60%] bg-[radial-gradient(ellipse_at_0%_50%,rgba(255,107,0,0.08)_0%,transparent_70%)]" />
+        <div className="absolute top-1/3 right-0 w-[30%] h-[60%] bg-[radial-gradient(ellipse_at_100%_50%,rgba(255,149,0,0.06)_0%,transparent_70%)]" />
+
+        {/* Noise texture */}
+        <div className="absolute inset-0 bg-noise opacity-50" />
       </div>
 
-      {/* Content */}
-      <Container className="relative z-10 pt-20 pointer-events-auto">
-        <div className="max-w-3xl mx-auto text-center">
-          {/* Main Headline */}
+      {/* ===== Main Content ===== */}
+      <Container className="relative z-10 pt-24 pb-16 md:pt-32 md:pb-24">
+        <div className="max-w-4xl mx-auto">
+          {/* Overline Badge - Orange themed */}
+          <motion.div
+            variants={heroOverline}
+            initial="hidden"
+            animate="visible"
+            className="flex justify-center md:justify-start mb-8"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--accent-cta-muted)] border border-[rgba(255,107,0,0.3)] backdrop-blur-sm">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent-cta)] opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent-cta)]" />
+              </span>
+              <span className="font-display text-[11px] font-semibold tracking-[0.2em] uppercase text-[var(--accent-cta)]">
+                LED Vision Rental
+              </span>
+            </div>
+          </motion.div>
+
+          {/* Main Headline - Orange gradient */}
           <motion.h1
             variants={heroHeadline}
             initial="hidden"
             animate="visible"
-            className="text-[--text-hero] font-bold leading-[--leading-tight] tracking-[--tracking-tight] text-[--text-primary] mb-6"
+            className="text-center md:text-left"
           >
-            <span className="text-gradient">{headline.split("、")[0]}、</span>
-            <br className="hidden sm:block" />
-            {headline.split("、")[1]}
+            <span className="block font-display text-[clamp(2.5rem,7vw,5rem)] font-black leading-[1.1] tracking-wide">
+              <span className="text-gradient-orange text-glow-orange">{headlineParts[0]}、</span>
+              <br className="hidden sm:block" />
+              <span className="text-[var(--text-primary)]">
+                {headlineParts[1] || "映像演出で確実なものに。"}
+              </span>
+            </span>
           </motion.h1>
 
           {/* Subheadline */}
@@ -125,7 +175,7 @@ export function Hero({
             variants={heroSubheadline}
             initial="hidden"
             animate="visible"
-            className="text-lg md:text-xl text-[--text-secondary] mb-8 max-w-2xl mx-auto"
+            className="mt-8 text-lg md:text-xl text-[var(--text-secondary)] leading-relaxed max-w-2xl text-center md:text-left mx-auto md:mx-0"
           >
             {subheadline}
           </motion.p>
@@ -135,53 +185,82 @@ export function Hero({
             variants={heroCTA}
             initial="hidden"
             animate="visible"
-            className="flex flex-col sm:flex-row gap-4 justify-center mb-12"
+            className="mt-10 flex flex-col sm:flex-row gap-4 justify-center md:justify-start"
           >
-            <Button size="lg" rightIcon={<ArrowRight className="w-5 h-5" />}>
-              無料で相談する
+            <Button
+              size="lg"
+              className="group relative overflow-hidden bg-[var(--accent-cta)] hover:bg-[var(--accent-cta-hover)] shadow-[var(--glow-orange)]"
+              rightIcon={
+                <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+              }
+            >
+              <span className="relative z-10">無料で相談する</span>
             </Button>
-            <Button variant="secondary" size="lg" leftIcon={<Play className="w-5 h-5" />}>
-              サービス紹介動画
+            <Button
+              variant="secondary"
+              size="lg"
+              className="backdrop-blur-sm border-[var(--accent-cta)]/30 hover:border-[var(--accent-cta)]/60"
+            >
+              サービス詳細を見る
             </Button>
           </motion.div>
 
-          {/* Trust Badges */}
+          {/* Stats Row - Orange accents */}
           <motion.div
-            variants={heroBadges}
+            variants={heroStats}
             initial="hidden"
             animate="visible"
-            className="flex flex-wrap justify-center gap-4"
+            className="mt-16 pt-10 border-t border-[var(--accent-cta)]/20"
           >
-            {trustBadges.map((badge, index) => (
-              <Badge
-                key={index}
-                variant="primary"
-                size="md"
-                icon={<badge.icon className="w-4 h-4" />}
-              >
-                <span className="font-semibold">{badge.label}</span>
-                <span className="text-[--text-secondary]">{badge.value}</span>
-              </Badge>
-            ))}
+            <div className="grid grid-cols-3 gap-6 md:gap-12">
+              {heroMetrics.map((stat, index) => (
+                <motion.div
+                  key={index}
+                  variants={heroStatItem}
+                  className="text-center md:text-left"
+                >
+                  <div className="flex items-baseline justify-center md:justify-start gap-1">
+                    <span className="font-display text-3xl md:text-5xl font-black text-[var(--text-primary)] tracking-tight">
+                      {stat.value}
+                    </span>
+                    <span className="font-display text-lg md:text-2xl font-bold text-[var(--accent-cta)]">
+                      {stat.suffix}
+                    </span>
+                  </div>
+                  <div className="mt-2 flex items-center justify-center md:justify-start gap-2">
+                    <stat.icon className="w-4 h-4 text-[var(--accent-cta)] opacity-60" />
+                    <span className="text-sm text-[var(--text-muted)] uppercase tracking-wide">
+                      {stat.label}
+                    </span>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         </div>
       </Container>
 
-      {/* Scroll Indicator */}
+      {/* ===== Scroll Indicator - Orange themed ===== */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.2, duration: 0.6 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        transition={{ delay: 1.5, duration: 0.6 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
       >
         <motion.div
           animate={{ y: [0, 8, 0] }}
-          transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-          className="w-6 h-10 rounded-full border-2 border-[--text-muted] flex justify-center pt-2"
+          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+          className="flex flex-col items-center gap-2"
         >
-          <div className="w-1.5 h-3 rounded-full bg-[--text-muted]" />
+          <span className="text-[10px] uppercase tracking-[0.2em] text-[var(--text-muted)]">
+            Scroll
+          </span>
+          <div className="w-[1px] h-8 bg-gradient-to-b from-[var(--accent-cta)] to-transparent" />
         </motion.div>
       </motion.div>
+
+      {/* ===== Decorative LED Lines - Orange ===== */}
+      <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[var(--accent-cta)]/50 to-transparent" />
     </section>
   );
 }

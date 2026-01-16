@@ -2,9 +2,16 @@
 
 import { motion } from "motion/react";
 import Image from "next/image";
+import { AlertCircle } from "lucide-react";
 import { Section } from "@/components/layout";
-import { Heading } from "@/components/ui";
 import { StaggerContainer, StaggerItem } from "@/components/animation";
+import {
+  sectionHeader,
+  sectionOverline,
+  sectionTitle,
+  sectionSubtitle,
+  cardHoverDramatic,
+} from "@/lib/animations";
 import type { ProblemSectionData, ProblemItemData } from "@/lib/sanity";
 
 // デフォルトのカードデータ（CMSデータがない場合）
@@ -46,29 +53,70 @@ interface ProblemProps {
 }
 
 export function Problem({ problemSectionData }: ProblemProps) {
-  const sectionTitle = problemSectionData?.sectionTitle || "こんなお悩みはありませんか？";
-  const sectionSubtitle = problemSectionData?.sectionSubtitle || "LEDビジョンの導入には、さまざまな不安がつきものです。";
-  const transitionText = problemSectionData?.transitionText || "そのお悩み、すべて解決できます。";
-  const items = problemSectionData?.items && problemSectionData.items.length > 0
-    ? problemSectionData.items
-    : defaultItems;
+  const sectionTitleText =
+    problemSectionData?.sectionTitle || "こんなお悩みはありませんか？";
+  const sectionSubtitleText =
+    problemSectionData?.sectionSubtitle ||
+    "LEDビジョンの導入には、さまざまな不安がつきものです。";
+  const transitionText =
+    problemSectionData?.transitionText || "そのお悩み、すべて解決できます。";
+  const items =
+    problemSectionData?.items && problemSectionData.items.length > 0
+      ? problemSectionData.items
+      : defaultItems;
 
   return (
-    <Section id="problem" variant="alt">
-      <div className="text-center mb-12">
-        <Heading as="h2" className="mb-4">
-          {sectionTitle}
-        </Heading>
-        <p className="text-[var(--text-secondary)] max-w-2xl mx-auto">{sectionSubtitle}</p>
-      </div>
+    <Section id="problem" variant="grid" className="overflow-hidden">
+      {/* Spotlight Effect */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[200%] h-[50%] bg-[radial-gradient(ellipse_at_50%_0%,rgba(0,240,255,0.08)_0%,transparent_50%)] pointer-events-none" />
 
-      <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      {/* Section Header */}
+      <motion.div
+        variants={sectionHeader}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        className="text-center mb-16 relative z-10"
+      >
+        {/* Overline */}
+        <motion.div variants={sectionOverline} className="mb-4">
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[rgba(255,51,102,0.1)] border border-[rgba(255,51,102,0.2)]">
+            <AlertCircle className="w-3.5 h-3.5 text-[var(--accent-error)]" />
+            <span className="font-display text-[10px] font-semibold tracking-[0.2em] uppercase text-[var(--accent-error)]">
+              Common Problems
+            </span>
+          </span>
+        </motion.div>
+
+        {/* Title */}
+        <motion.h2
+          variants={sectionTitle}
+          className="section-title mb-4"
+        >
+          {sectionTitleText}
+        </motion.h2>
+
+        {/* Subtitle */}
+        <motion.p
+          variants={sectionSubtitle}
+          className="section-subtitle max-w-2xl mx-auto"
+        >
+          {sectionSubtitleText}
+        </motion.p>
+      </motion.div>
+
+      {/* Problem Cards Grid */}
+      <StaggerContainer
+        speed="slow"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10"
+      >
         {items.map((item, index) => (
           <StaggerItem key={index}>
             <motion.div
-              className="group relative aspect-[4/3] rounded-xl overflow-hidden cursor-pointer"
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
+              variants={cardHoverDramatic}
+              initial="rest"
+              whileHover="hover"
+              className="group relative aspect-[4/3] rounded-2xl overflow-hidden cursor-pointer"
             >
               {/* Background Image */}
               <div className="absolute inset-0">
@@ -77,47 +125,72 @@ export function Problem({ problemSectionData }: ProblemProps) {
                     src={item.backgroundImageUrl}
                     alt={item.backgroundImageAlt || item.title}
                     fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
                     sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                 ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-[var(--bg-elevated)] to-[var(--bg-secondary)]" />
+                  <div className="w-full h-full bg-gradient-to-br from-[var(--bg-elevated)] to-[var(--bg-card)]" />
                 )}
               </div>
 
-              {/* Dark Overlay with Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/30 transition-opacity duration-300 group-hover:from-black/85 group-hover:via-black/55" />
+              {/* Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-primary)] via-[var(--bg-primary)]/60 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-95" />
+
+              {/* Scanline Effect on hover */}
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-500 scanline-overlay" />
+
+              {/* Number Badge */}
+              <div className="absolute top-4 left-4 z-10">
+                <div className="w-10 h-10 rounded-lg bg-[var(--bg-primary)]/80 backdrop-blur-sm border border-[var(--accent-error)]/30 flex items-center justify-center transition-all duration-300 group-hover:border-[var(--accent-error)]/60 group-hover:shadow-[0_0_20px_rgba(255,51,102,0.3)]">
+                  <span className="font-display text-lg font-bold text-[var(--accent-error)]">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                </div>
+              </div>
 
               {/* Content */}
-              <div className="absolute inset-0 flex flex-col justify-end p-5 md:p-6">
-                <h3 className="text-lg md:text-xl font-bold text-white mb-2 leading-tight">
+              <div className="absolute inset-0 flex flex-col justify-end p-6">
+                <h3 className="font-display text-xl md:text-2xl font-bold text-[var(--text-primary)] mb-2 leading-tight tracking-wide">
                   {item.title}
                 </h3>
-                <p className="text-sm md:text-base text-white/80 leading-relaxed line-clamp-2">
+                <p className="text-sm md:text-base text-[var(--text-secondary)] leading-relaxed line-clamp-2">
                   {item.description}
                 </p>
               </div>
 
-              {/* Subtle Border Glow on Hover */}
-              <div className="absolute inset-0 rounded-xl border border-white/0 transition-colors duration-300 group-hover:border-white/20" />
+              {/* Border Glow Effect */}
+              <div className="absolute inset-0 rounded-2xl border border-[var(--border-default)] transition-all duration-500 group-hover:border-[var(--accent-error)]/30 group-hover:shadow-[inset_0_0_30px_rgba(255,51,102,0.1)]" />
             </motion.div>
           </StaggerItem>
         ))}
       </StaggerContainer>
 
-      {/* Transition Text */}
+      {/* Transition Text with LED Line */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.5 }}
-        transition={{ duration: 0.6, delay: 0.3 }}
-        className="text-center mt-12 pt-12 border-t border-[var(--border-default)]"
+        transition={{ duration: 0.8, delay: 0.3, ease: [0.19, 1, 0.22, 1] }}
+        className="relative z-10 mt-20"
       >
-        <p className="text-xl md:text-2xl text-[var(--text-secondary)]">
-          そのお悩み、
-          <span className="text-[var(--accent-primary)] font-semibold">すべて解決</span>
-          できます。
-        </p>
+        {/* LED Divider Line */}
+        <div className="h-[1px] bg-gradient-to-r from-transparent via-[var(--accent-primary)]/50 to-transparent mb-12" />
+
+        {/* Transition Text */}
+        <div className="text-center">
+          <p className="text-2xl md:text-3xl font-display font-medium text-[var(--text-secondary)] tracking-wide">
+            {transitionText.split("、")[0]}
+            {transitionText.includes("、") && "、"}
+            <span className="text-[var(--accent-primary)] font-bold text-glow">
+              {transitionText.includes("すべて解決")
+                ? "すべて解決"
+                : transitionText.split("、")[1]?.replace("できます。", "")}
+            </span>
+            {transitionText.includes("できます") && (
+              <span className="text-[var(--text-primary)]">できます。</span>
+            )}
+          </p>
+        </div>
       </motion.div>
     </Section>
   );

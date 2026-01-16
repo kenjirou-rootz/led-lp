@@ -1,8 +1,9 @@
 "use client";
 
 import { motion } from "motion/react";
+import Image from "next/image";
+import { Building2 } from "lucide-react";
 import { Section } from "@/components/layout";
-import { Heading } from "@/components/ui";
 import { FadeInView } from "@/components/animation";
 import type { ClientLogoData } from "@/lib/sanity";
 
@@ -37,44 +38,74 @@ export function ClientLogos({
   clientLogosData,
 }: ClientLogosProps) {
   // CMSデータがある場合はそちらを使用
-  const displayLogos = clientLogosData && clientLogosData.length > 0
-    ? clientLogosData.map((c) => ({
-        id: c._id,
-        name: c.companyName,
-        logoUrl: c.logoUrl,
-      }))
-    : logos;
+  const displayLogos =
+    clientLogosData && clientLogosData.length > 0
+      ? clientLogosData.map((c) => ({
+          id: c._id,
+          name: c.companyName,
+          logoUrl: c.logoUrl,
+        }))
+      : logos;
+
   // Double the logos for seamless infinite scroll
   const duplicatedLogos = [...displayLogos, ...displayLogos];
 
   return (
-    <Section variant="alt" noPadding className="py-12 md:py-16 overflow-hidden">
-      <div className="text-center mb-10">
+    <Section
+      variant="default"
+      noPadding
+      className="py-16 md:py-20 overflow-hidden"
+    >
+      {/* Background Effects */}
+      <div className="absolute inset-0 bg-pixel-grid opacity-15 pointer-events-none" />
+
+      {/* Section Header */}
+      <div className="text-center mb-12 relative z-10">
         <FadeInView>
-          <Heading as="h3" animateOnScroll={false} className="text-lg md:text-xl mb-2">
-            {title}
-          </Heading>
-          <p className="text-sm text-[--text-muted]">{subtitle}</p>
+          {/* Overline */}
+          <div className="mb-4">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--accent-primary-muted)] border border-[rgba(0,240,255,0.2)]">
+              <Building2 className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
+              <span className="font-display text-[10px] font-semibold tracking-[0.2em] uppercase text-[var(--accent-primary)]">
+                Trusted By
+              </span>
+            </span>
+          </div>
+
+          {/* Title */}
+          <h3 className="section-title mb-3">
+            <span className="text-gradient">{title.slice(0, 2)}</span>
+            <span>{title.slice(2)}</span>
+          </h3>
+
+          {/* Subtitle */}
+          <p className="section-subtitle max-w-xl mx-auto">
+            {subtitle}
+          </p>
         </FadeInView>
       </div>
 
       {/* Infinite Scroll Container */}
       <div className="relative">
-        {/* Gradient Masks */}
-        <div className="absolute left-0 top-0 bottom-0 w-20 md:w-40 bg-gradient-to-r from-[--bg-secondary] to-transparent z-10" />
-        <div className="absolute right-0 top-0 bottom-0 w-20 md:w-40 bg-gradient-to-l from-[--bg-secondary] to-transparent z-10" />
+        {/* Gradient Masks - LED style */}
+        <div className="absolute left-0 top-0 bottom-0 w-24 md:w-48 bg-gradient-to-r from-[var(--bg-primary)] via-[var(--bg-primary)]/80 to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-24 md:w-48 bg-gradient-to-l from-[var(--bg-primary)] via-[var(--bg-primary)]/80 to-transparent z-10 pointer-events-none" />
+
+        {/* Decorative LED Lines */}
+        <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[var(--accent-primary)]/20 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[var(--accent-primary)]/20 to-transparent" />
 
         {/* Scrolling Logos */}
         <motion.div
-          className="flex gap-8 md:gap-12"
+          className="flex gap-6 md:gap-8 py-6"
           animate={{
-            x: [0, -50 * displayLogos.length],
+            x: [0, -160 * displayLogos.length],
           }}
           transition={{
             x: {
               repeat: Infinity,
               repeatType: "loop",
-              duration: 20,
+              duration: 25,
               ease: "linear",
             },
           }}
@@ -82,23 +113,61 @@ export function ClientLogos({
           {duplicatedLogos.map((logo, index) => (
             <div
               key={`${logo.id}-${index}`}
-              className="flex-shrink-0 w-32 h-16 md:w-40 md:h-20 bg-[--bg-card] rounded-lg border border-[--border-default] flex items-center justify-center px-4"
+              className="group flex-shrink-0 w-36 h-20 md:w-44 md:h-24 bg-[var(--bg-card)] rounded-xl border border-[var(--border-default)] flex items-center justify-center px-5 transition-all duration-500 hover:border-[var(--accent-primary)]/40 hover:shadow-[var(--glow-card-hover)]"
             >
               {logo.logoUrl ? (
-                <img
+                <Image
                   src={logo.logoUrl}
                   alt={logo.name}
-                  className="max-w-full max-h-full object-contain opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300"
+                  width={120}
+                  height={60}
+                  className="max-w-full max-h-full object-contain opacity-50 grayscale transition-all duration-500 group-hover:opacity-100 group-hover:grayscale-0"
                 />
               ) : (
-                <span className="text-[--text-muted] text-sm font-medium">
-                  {logo.name}
-                </span>
+                <div className="flex flex-col items-center gap-1">
+                  <div className="w-8 h-8 rounded-lg bg-[var(--bg-elevated)] border border-[var(--border-default)] flex items-center justify-center">
+                    <Building2 className="w-4 h-4 text-[var(--text-muted)]" />
+                  </div>
+                  <span className="text-[var(--text-muted)] text-xs font-medium">
+                    {logo.name}
+                  </span>
+                </div>
               )}
             </div>
           ))}
         </motion.div>
       </div>
+
+      {/* Stats Row */}
+      <FadeInView delay={0.2}>
+        <div className="mt-12 flex justify-center gap-8 md:gap-16 relative z-10">
+          {[
+            { value: "50+", label: "取引企業" },
+            { value: "3,500+", label: "累計案件" },
+            { value: "98%", label: "継続率" },
+          ].map((stat, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{
+                duration: 0.5,
+                delay: 0.3 + index * 0.1,
+                ease: [0.19, 1, 0.22, 1],
+              }}
+              className="text-center"
+            >
+              <div className="font-display text-2xl md:text-3xl font-bold text-[var(--accent-primary)] tracking-tight">
+                {stat.value}
+              </div>
+              <div className="text-xs text-[var(--text-muted)] uppercase tracking-wider mt-1">
+                {stat.label}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </FadeInView>
     </Section>
   );
 }

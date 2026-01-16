@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Menu, X, Phone } from "lucide-react";
+import { Menu, X, Phone, Zap } from "lucide-react";
 import { Container } from "@/components/ui";
 import { Button } from "@/components/ui";
 import type { SiteSettings } from "@/lib/sanity";
@@ -20,7 +20,7 @@ interface HeaderProps {
 }
 
 export function Header({ siteSettings }: HeaderProps) {
-  const siteName = siteSettings?.siteName || "LEDビジョンレンタル";
+  const siteName = siteSettings?.siteName || "Rootz LED";
   const phoneNumber = siteSettings?.contactPhone || "0120-XXX-XXX";
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -36,63 +36,148 @@ export function Header({ siteSettings }: HeaderProps) {
 
   return (
     <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       className={`
-        fixed top-0 left-0 right-0 z-[--z-fixed]
-        transition-all duration-300
+        fixed top-0 left-0 right-0 z-[1000]
+        transition-all duration-500
         ${isScrolled
-          ? "bg-[--bg-primary]/90 backdrop-blur-md border-b border-[--border-default]"
+          ? "bg-[--bg-primary]/95 backdrop-blur-xl border-b border-[--accent-primary]/10 shadow-[0_4px_30px_rgba(0,240,255,0.05)]"
           : "bg-transparent"
         }
       `}
     >
+      {/* Subtle top glow line when scrolled */}
+      <motion.div
+        initial={{ scaleX: 0, opacity: 0 }}
+        animate={{
+          scaleX: isScrolled ? 1 : 0,
+          opacity: isScrolled ? 1 : 0
+        }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[--accent-primary]/50 to-transparent origin-center"
+      />
+
       <Container className="relative z-10">
         <nav className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <a href="#" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[--accent-primary] to-[--accent-secondary] flex items-center justify-center">
-              <span className="text-white font-bold text-sm">LED</span>
+          <motion.a
+            href="#"
+            className="flex items-center gap-3 group"
+            whileHover={{ scale: 1.02 }}
+            transition={{ duration: 0.3 }}
+          >
+            {/* LED Icon Mark */}
+            <div className="relative">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[--accent-primary] via-[--accent-secondary] to-[--accent-primary] flex items-center justify-center transition-all duration-300 group-hover:shadow-[var(--glow-cyan)]">
+                <Zap className="w-5 h-5 text-white fill-white" />
+              </div>
+              {/* Glow effect */}
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-[--accent-primary] to-[--accent-secondary] blur-lg opacity-0 group-hover:opacity-40 transition-opacity duration-300" />
             </div>
-            <span className="font-bold text-lg text-[--text-primary] hidden sm:inline">
-              {siteName}
-            </span>
-          </a>
+
+            {/* Brand Text */}
+            <div className="hidden sm:flex items-baseline gap-1.5">
+              <span className="font-display text-xs font-bold tracking-[0.2em] text-[--accent-primary] uppercase">
+                LED
+              </span>
+              <span className="font-display text-lg font-bold tracking-wide text-[--text-primary] group-hover:text-[--accent-primary] transition-colors duration-300">
+                {siteName}
+              </span>
+            </div>
+          </motion.a>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <a
+          <div className="hidden lg:flex items-center gap-1">
+            {navLinks.map((link, index) => (
+              <motion.a
                 key={link.href}
                 href={link.href}
-                className="text-sm text-[--text-secondary] hover:text-[--text-primary] transition-colors"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.5,
+                  delay: 0.1 + index * 0.05,
+                  ease: [0.16, 1, 0.3, 1]
+                }}
+                className="nav-link relative px-4 py-2 font-display text-[13px] font-medium tracking-[0.05em] text-[--text-secondary] hover:text-[--text-primary] transition-colors duration-300 group"
               >
                 {link.label}
-              </a>
+                {/* Animated underline */}
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-gradient-to-r from-[--accent-primary] to-[--accent-secondary] group-hover:w-[calc(100%-1.5rem)] transition-all duration-300 ease-out rounded-full" />
+                {/* Subtle glow on hover */}
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-[--accent-primary] blur-sm group-hover:w-[calc(100%-2rem)] transition-all duration-300 ease-out opacity-60" />
+              </motion.a>
             ))}
           </div>
 
-          {/* CTA Buttons */}
-          <div className="hidden md:flex items-center gap-3">
-            <a
+          {/* CTA Area */}
+          <div className="hidden md:flex items-center gap-4">
+            {/* Phone */}
+            <motion.a
               href={`tel:${phoneNumber.replace(/-/g, "")}`}
-              className="flex items-center gap-2 text-sm text-[--text-secondary] hover:text-[--text-primary] transition-colors"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-[--text-secondary] hover:text-[--accent-primary] hover:bg-[--accent-primary]/5 transition-all duration-300 group"
             >
-              <Phone className="w-4 h-4" />
-              <span>{phoneNumber}</span>
-            </a>
-            <Button size="sm">無料相談</Button>
+              <div className="relative">
+                <Phone className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" />
+                {/* Phone icon glow */}
+                <div className="absolute inset-0 blur-md bg-[--accent-primary] opacity-0 group-hover:opacity-40 transition-opacity duration-300" />
+              </div>
+              <span className="font-display text-sm tracking-wide font-medium">
+                {phoneNumber}
+              </span>
+            </motion.a>
+
+            {/* CTA Button */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+            >
+              <Button
+                size="sm"
+                className="relative overflow-hidden bg-gradient-to-r from-[--accent-cta] to-[--accent-cta-hover] hover:shadow-[var(--glow-orange)] transition-shadow duration-300 font-display tracking-wide"
+              >
+                <span className="relative z-10">無料相談</span>
+              </Button>
+            </motion.div>
           </div>
 
           {/* Mobile Menu Button */}
-          <button
+          <motion.button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden p-2 text-[--text-primary]"
+            className="lg:hidden relative p-2.5 rounded-xl text-[--text-primary] hover:bg-[--accent-primary]/10 transition-colors duration-300"
             aria-label={isMobileMenuOpen ? "メニューを閉じる" : "メニューを開く"}
+            whileTap={{ scale: 0.95 }}
           >
-            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+            <AnimatePresence mode="wait">
+              {isMobileMenuOpen ? (
+                <motion.div
+                  key="close"
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <X className="w-6 h-6" />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="menu"
+                  initial={{ rotate: 90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: -90, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Menu className="w-6 h-6" />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.button>
         </nav>
       </Container>
 
@@ -103,31 +188,53 @@ export function Header({ siteSettings }: HeaderProps) {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="lg:hidden bg-[--bg-primary] border-b border-[--border-default]"
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:hidden bg-[--bg-primary]/98 backdrop-blur-xl border-b border-[--accent-primary]/10"
           >
+            {/* Decorative line */}
+            <div className="h-[1px] bg-gradient-to-r from-transparent via-[--accent-primary]/30 to-transparent" />
+
             <Container>
-              <div className="py-4 space-y-4">
-                {navLinks.map((link) => (
-                  <a
+              <div className="py-6 space-y-2">
+                {navLinks.map((link, index) => (
+                  <motion.a
                     key={link.href}
                     href={link.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block py-2 text-[--text-secondary] hover:text-[--text-primary] transition-colors"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{
+                      duration: 0.3,
+                      delay: index * 0.05,
+                      ease: [0.16, 1, 0.3, 1]
+                    }}
+                    className="flex items-center gap-3 py-3 px-4 rounded-xl font-display text-[15px] tracking-wide text-[--text-secondary] hover:text-[--text-primary] hover:bg-[--accent-primary]/5 transition-all duration-300 group"
                   >
+                    <span className="w-1.5 h-1.5 rounded-full bg-[--accent-primary]/40 group-hover:bg-[--accent-primary] group-hover:shadow-[0_0_8px_var(--accent-primary)] transition-all duration-300" />
                     {link.label}
-                  </a>
+                  </motion.a>
                 ))}
-                <div className="pt-4 border-t border-[--border-default] space-y-3">
+
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                  className="pt-4 mt-4 border-t border-[--border-default] space-y-4"
+                >
                   <a
                     href={`tel:${phoneNumber.replace(/-/g, "")}`}
-                    className="flex items-center gap-2 text-[--text-secondary]"
+                    className="flex items-center gap-3 px-4 py-2 text-[--text-secondary] hover:text-[--accent-primary] transition-colors duration-300 group"
                   >
-                    <Phone className="w-4 h-4" />
-                    <span>{phoneNumber}</span>
+                    <div className="relative">
+                      <Phone className="w-5 h-5" />
+                      <div className="absolute inset-0 blur-md bg-[--accent-primary] opacity-0 group-hover:opacity-40 transition-opacity duration-300" />
+                    </div>
+                    <span className="font-display tracking-wide">{phoneNumber}</span>
                   </a>
-                  <Button className="w-full">無料相談</Button>
-                </div>
+                  <Button className="w-full bg-gradient-to-r from-[--accent-cta] to-[--accent-cta-hover] hover:shadow-[var(--glow-orange)] transition-shadow duration-300 font-display tracking-wide">
+                    無料相談
+                  </Button>
+                </motion.div>
               </div>
             </Container>
           </motion.div>

@@ -2,14 +2,15 @@
 @import "../styles/design-tokens.css";
 
 /* =============================================================================
-   LED VISION LP - Global Styles
+   LED VISION LP - CINEMA TECH Global Styles
+   A fusion of cinematic drama and technical precision
    ============================================================================= */
 
 @theme inline {
   --color-background: var(--bg-primary);
   --color-foreground: var(--text-primary);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-mono);
 }
 
 /* =============================================================================
@@ -23,8 +24,10 @@ html {
 body {
   background: var(--bg-primary);
   color: var(--text-primary);
-  font-family: var(--font-sans);
-  line-height: var(--leading-relaxed);
+  font-family: var(--font-body), var(--font-japanese);
+  font-weight: var(--font-normal);
+  line-height: var(--leading-normal);
+  letter-spacing: var(--tracking-normal);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -33,6 +36,43 @@ body {
    Typography Utilities
    ============================================================================= */
 
+.font-display {
+  font-family: var(--font-display), var(--font-japanese);
+  letter-spacing: var(--tracking-wide);
+}
+
+.font-body {
+  font-family: var(--font-body), var(--font-japanese);
+}
+
+/* Japanese Mincho (明朝体) - For section titles */
+.font-mincho {
+  font-family: var(--font-mincho);
+  letter-spacing: var(--tracking-wide);
+  font-feature-settings: "palt" 1;
+}
+
+/* Section Title - Large 明朝体 with dramatic size */
+.section-title {
+  font-family: var(--font-mincho);
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.05em;
+  font-feature-settings: "palt" 1;
+  color: var(--text-primary);
+}
+
+/* Section Subtitle - Smaller body font */
+.section-subtitle {
+  font-family: var(--font-body), var(--font-japanese);
+  font-size: clamp(0.875rem, 1.2vw, 1.125rem);
+  font-weight: 400;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Text Gradient - Electric Cyan to Blue */
 .text-gradient {
   background: var(--gradient-hero);
   -webkit-background-clip: text;
@@ -40,31 +80,137 @@ body {
   background-clip: text;
 }
 
+/* Text Gradient - CTA Orange */
+.text-gradient-cta {
+  background: var(--gradient-cta);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Text Gradient - Orange (Hero) */
+.text-gradient-orange {
+  background: linear-gradient(135deg, #ff6b00 0%, #ff9500 50%, #ffb347 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Text Glow - Cyan LED effect */
 .text-glow {
-  text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+  text-shadow:
+    0 0 10px rgba(0, 240, 255, 0.5),
+    0 0 20px rgba(0, 240, 255, 0.3),
+    0 0 40px rgba(0, 240, 255, 0.1);
+}
+
+.text-glow-orange {
+  text-shadow:
+    0 0 10px rgba(255, 107, 0, 0.5),
+    0 0 20px rgba(255, 107, 0, 0.3);
+}
+
+/* Overline text style */
+.overline {
+  font-family: var(--font-display);
+  font-size: var(--text-overline);
+  font-weight: var(--font-semibold);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--accent-primary);
+}
+
+/* =============================================================================
+   LED Pixel Grid Background
+   ============================================================================= */
+
+.bg-pixel-grid {
+  background-image:
+    linear-gradient(rgba(0, 240, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.02) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+}
+
+.bg-pixel-grid-dense {
+  background-image:
+    linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* =============================================================================
+   Scanline Effect
+   ============================================================================= */
+
+.scanline-overlay {
+  position: relative;
+}
+
+.scanline-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-scanline);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.5;
 }
 
 /* =============================================================================
    Glow Effects
    ============================================================================= */
 
-.glow-blue {
-  box-shadow: var(--glow-blue);
+.glow-cyan {
+  box-shadow: var(--glow-cyan);
 }
 
-.glow-purple {
-  box-shadow: var(--glow-purple);
+.glow-cyan-intense {
+  box-shadow: var(--glow-cyan-intense);
+}
+
+.glow-cyan-subtle {
+  box-shadow: var(--glow-cyan-subtle);
 }
 
 .glow-orange {
   box-shadow: var(--glow-orange);
 }
 
-.glow-card {
-  position: relative;
+.glow-orange-intense {
+  box-shadow: var(--glow-orange-intense);
 }
 
-.glow-card::before {
+.glow-blue {
+  box-shadow: var(--glow-blue);
+}
+
+/* =============================================================================
+   Card Styles - Cinema Tech
+   ============================================================================= */
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-xl);
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+.card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-hover);
+  box-shadow: var(--glow-card-hover);
+  transform: translateY(-4px);
+}
+
+/* Card with animated border glow */
+.card-glow {
+  position: relative;
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+.card-glow::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -72,8 +218,9 @@ body {
   padding: 1px;
   background: linear-gradient(
     135deg,
-    rgba(59, 130, 246, 0.3) 0%,
-    rgba(139, 92, 246, 0.3) 100%
+    rgba(0, 240, 255, 0.3) 0%,
+    rgba(59, 130, 246, 0.2) 50%,
+    rgba(139, 92, 246, 0.1) 100%
   );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -84,7 +231,7 @@ body {
   pointer-events: none;
 }
 
-.glow-card:hover::before {
+.card-glow:hover::before {
   opacity: 1;
 }
 
@@ -92,31 +239,51 @@ body {
    Background Effects
    ============================================================================= */
 
-.bg-glow {
+/* Spotlight from top */
+.bg-spotlight {
   position: relative;
 }
 
-.bg-glow::after {
+.bg-spotlight::before {
   content: "";
   position: absolute;
-  top: 50%;
+  top: 0;
   left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  height: 100%;
-  background: var(--gradient-glow);
+  transform: translateX(-50%);
+  width: 150%;
+  height: 60%;
+  background: var(--gradient-spotlight);
   pointer-events: none;
-  z-index: -1;
+  z-index: 0;
 }
 
-.bg-grid {
-  background-image: linear-gradient(
-      rgba(255, 255, 255, 0.03) 1px,
-      transparent 1px
-    ),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 60px 60px;
+/* Vignette effect */
+.bg-vignette {
+  position: relative;
+}
+
+.bg-vignette::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-vignette);
   pointer-events: none;
+  z-index: 1;
+}
+
+/* Noise texture overlay */
+.bg-noise {
+  position: relative;
+}
+
+.bg-noise::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 1;
 }
 
 /* =============================================================================
@@ -132,47 +299,87 @@ body {
   padding-right: var(--container-padding);
 }
 
+.container-narrow {
+  width: 100%;
+  max-width: var(--container-narrow);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--container-padding);
+  padding-right: var(--container-padding);
+}
+
 /* =============================================================================
    Section Styles
    ============================================================================= */
 
 .section {
-  padding-top: var(--section-padding);
-  padding-bottom: var(--section-padding);
+  padding-top: var(--section-padding-y);
+  padding-bottom: var(--section-padding-y);
+  position: relative;
 }
 
-.section-heading {
-  font-size: var(--text-h2);
+/* Section Title - 明朝体 with dramatic size */
+.section-title {
+  font-family: var(--font-mincho);
+  font-size: var(--text-section-title);
   font-weight: var(--font-bold);
   line-height: var(--leading-tight);
-  letter-spacing: var(--tracking-tight);
-  margin-bottom: var(--space-6);
+  letter-spacing: var(--tracking-wide);
+  font-feature-settings: "palt" 1;
+  color: var(--text-primary);
 }
 
-.section-subheading {
-  font-size: var(--text-body);
+/* Legacy: section-heading for backwards compatibility */
+.section-heading {
+  font-family: var(--font-mincho);
+  font-size: var(--text-section-title);
+  font-weight: var(--font-bold);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-wide);
+  font-feature-settings: "palt" 1;
+}
+
+/* Section Subtitle - Body font, smaller than title */
+.section-subtitle {
+  font-family: var(--font-body), var(--font-japanese);
+  font-size: var(--text-section-subtitle);
+  font-weight: var(--font-normal);
   color: var(--text-secondary);
-  max-width: var(--content-max);
+  line-height: var(--leading-relaxed);
+  max-width: var(--container-content);
+}
+
+/* Legacy: section-subheading for backwards compatibility */
+.section-subheading {
+  font-family: var(--font-body), var(--font-japanese);
+  font-size: var(--text-section-subtitle);
+  font-weight: var(--font-normal);
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+  max-width: var(--container-content);
 }
 
 /* =============================================================================
-   Button Base Styles
+   Button Styles - Cinema Tech
    ============================================================================= */
 
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-2);
-  padding: var(--space-3) var(--space-6);
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-8);
+  font-family: var(--font-body);
   font-size: var(--text-body);
-  font-weight: var(--font-medium);
+  font-weight: var(--font-semibold);
   line-height: 1;
   border-radius: var(--radius-lg);
   transition: all var(--duration-normal) var(--ease-out);
   cursor: pointer;
   border: none;
   outline: none;
+  position: relative;
+  overflow: hidden;
 }
 
 .btn:focus-visible {
@@ -180,52 +387,208 @@ body {
   outline-offset: 2px;
 }
 
+/* Primary CTA Button - Orange with glow */
 .btn-primary {
   background: var(--gradient-cta);
   color: var(--text-inverse);
+  font-weight: var(--font-bold);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: var(--glow-orange);
+  box-shadow: var(--glow-orange-intense);
 }
 
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Secondary Button - Cyan outline */
 .btn-secondary {
   background: transparent;
-  color: var(--text-primary);
-  border: 1px solid var(--border-default);
+  color: var(--accent-primary);
+  border: 1px solid var(--accent-primary);
 }
 
 .btn-secondary:hover {
-  border-color: var(--border-hover);
-  background: rgba(59, 130, 246, 0.1);
+  background: var(--accent-primary-muted);
+  box-shadow: var(--glow-cyan-subtle);
 }
 
+/* Ghost Button */
 .btn-ghost {
   background: transparent;
   color: var(--text-primary);
+  border: 1px solid var(--border-default);
 }
 
 .btn-ghost:hover {
   background: rgba(255, 255, 255, 0.05);
+  border-color: var(--border-hover);
 }
 
 /* =============================================================================
-   Card Styles
+   Badge Styles
    ============================================================================= */
 
-.card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-xl);
-  padding: var(--space-6);
-  transition: all var(--duration-normal) var(--ease-out);
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  font-weight: var(--font-medium);
+  border-radius: var(--radius-full);
+  background: var(--accent-primary-muted);
+  color: var(--accent-primary);
+  border: 1px solid rgba(0, 240, 255, 0.2);
 }
 
-.card:hover {
-  border-color: var(--border-hover);
-  box-shadow: var(--glow-card-hover);
+.badge-orange {
+  background: rgba(255, 107, 0, 0.15);
+  color: var(--accent-cta);
+  border-color: rgba(255, 107, 0, 0.3);
 }
+
+/* =============================================================================
+   Form Styles
+   ============================================================================= */
+
+.input {
+  width: 100%;
+  padding: var(--space-4) var(--space-5);
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  background: var(--bg-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  color: var(--text-primary);
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+.input:hover {
+  border-color: var(--border-hover);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px var(--accent-primary-muted);
+}
+
+.textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* =============================================================================
+   Animation Keyframes
+   ============================================================================= */
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: var(--glow-cyan);
+  }
+  50% {
+    box-shadow: var(--glow-cyan-intense);
+  }
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Animation utility classes */
+.animate-fade-in {
+  animation: fade-in var(--duration-slow) var(--ease-out) forwards;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up var(--duration-slow) var(--ease-out) forwards;
+}
+
+.animate-scale-in {
+  animation: scale-in var(--duration-slow) var(--ease-out) forwards;
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Staggered animation delays */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+.delay-600 { animation-delay: 600ms; }
+.delay-700 { animation-delay: 700ms; }
+.delay-800 { animation-delay: 800ms; }
 
 /* =============================================================================
    Scrollbar Styles
@@ -246,7 +609,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-secondary);
+  background: var(--accent-primary-dim);
 }
 
 /* =============================================================================
@@ -254,7 +617,7 @@ body {
    ============================================================================= */
 
 ::selection {
-  background: rgba(59, 130, 246, 0.3);
+  background: rgba(0, 240, 255, 0.3);
   color: var(--text-primary);
 }
 
@@ -276,8 +639,67 @@ body {
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(10, 10, 15, 0.7) 0%,
-    rgba(10, 10, 15, 0.9) 100%
+    rgba(5, 5, 8, 0.5) 0%,
+    rgba(5, 5, 8, 0.7) 50%,
+    rgba(5, 5, 8, 0.95) 100%
   );
   pointer-events: none;
+}
+
+/* =============================================================================
+   Divider with LED glow
+   ============================================================================= */
+
+.divider-glow {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--accent-primary) 50%,
+    transparent 100%
+  );
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+}
+
+/* =============================================================================
+   Number Badge (for Reason section etc.)
+   ============================================================================= */
+
+.number-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  font-family: var(--font-display);
+  font-size: var(--text-h3);
+  font-weight: var(--font-bold);
+  color: var(--accent-cta);
+  background: rgba(255, 107, 0, 0.1);
+  border: 2px solid var(--accent-cta);
+  border-radius: var(--radius-lg);
+}
+
+/* =============================================================================
+   Stats/Metrics Display
+   ============================================================================= */
+
+.stat-value {
+  font-family: var(--font-display);
+  font-size: var(--text-h1);
+  font-weight: var(--font-black);
+  color: var(--text-primary);
+  line-height: var(--leading-none);
+}
+
+.stat-value-accent {
+  color: var(--accent-primary);
+  text-shadow: var(--glow-cyan-subtle);
+}
+
+.stat-label {
+  font-size: var(--text-small);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
 }
