@@ -1,6 +1,17 @@
 import { z } from "zod";
 
+export const inquiryTypes = ["rental", "purchase"] as const;
+export type InquiryType = (typeof inquiryTypes)[number];
+
+export const inquiryTypeLabels: Record<InquiryType, string> = {
+  rental: "レンタル",
+  purchase: "購入",
+};
+
 export const contactSchema = z.object({
+  inquiryType: z.enum(inquiryTypes, {
+    message: "お問い合わせ種別を選択してください",
+  }),
   companyName: z
     .string()
     .max(100, "会社名は100文字以内で入力してください")

@@ -12,6 +12,8 @@ import {
   AlertCircle,
   Send,
   Zap,
+  Package,
+  ShoppingBag,
 } from "lucide-react";
 import { Section } from "@/components/layout";
 import { Button } from "@/components/ui";
@@ -21,7 +23,10 @@ import {
   sectionTitle,
   sectionSubtitle,
 } from "@/lib/animations";
-import { contactSchema, type ContactFormData } from "@/lib/validations/contact";
+import {
+  contactSchema,
+  type ContactFormData,
+} from "@/lib/validations/contact";
 import type { SiteSettings } from "@/lib/sanity";
 
 interface CTAProps {
@@ -36,6 +41,7 @@ interface CTAProps {
 type FormStatus = "idle" | "submitting" | "success" | "error";
 
 interface FieldErrors {
+  inquiryType?: string[];
   companyName?: string[];
   name?: string[];
   email?: string[];
@@ -54,6 +60,7 @@ export function CTA({
   const displayPhone = phone || siteSettings?.contactPhone || "0120-XXX-XXX";
   const displayEmail = email || siteSettings?.contactEmail || "info@example.com";
   const [formData, setFormData] = useState<ContactFormData>({
+    inquiryType: "rental",
     companyName: "",
     name: "",
     email: "",
@@ -64,7 +71,7 @@ export function CTA({
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -102,7 +109,7 @@ export function CTA({
       }
 
       setStatus("success");
-      setFormData({ companyName: "", name: "", email: "", message: "" });
+      setFormData({ inquiryType: "rental", companyName: "", name: "", email: "", message: "" });
     } catch (error) {
       setStatus("error");
       setErrorMessage(
@@ -222,6 +229,94 @@ export function CTA({
                     </motion.div>
                   ) : (
                     <form onSubmit={handleSubmit} className="space-y-5">
+                      {/* Inquiry Type Toggle */}
+                      <div>
+                        <label
+                          className="block text-sm font-medium text-[var(--text-secondary)] mb-3"
+                        >
+                          お問い合わせ種別{" "}
+                          <span className="text-[var(--accent-cta)]">*</span>
+                        </label>
+                        <div
+                          className="relative p-1 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-default)]"
+                          role="radiogroup"
+                          aria-label="お問い合わせ種別"
+                        >
+                          {/* Sliding Indicator */}
+                          <motion.div
+                            className="absolute top-1 bottom-1 rounded-lg bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-primary)]/80"
+                            initial={false}
+                            animate={{
+                              left: formData.inquiryType === "rental" ? "4px" : "calc(50% + 2px)",
+                              width: "calc(50% - 6px)",
+                            }}
+                            transition={{
+                              type: "spring",
+                              stiffness: 400,
+                              damping: 30,
+                            }}
+                            style={{
+                              boxShadow: "0 0 20px rgba(0, 240, 255, 0.4), 0 0 40px rgba(0, 240, 255, 0.2)",
+                            }}
+                          />
+
+                          <div className="relative grid grid-cols-2 gap-1">
+                            {/* Rental Option */}
+                            <button
+                              type="button"
+                              role="radio"
+                              aria-checked={formData.inquiryType === "rental"}
+                              onClick={() => {
+                                setFormData((prev) => ({ ...prev, inquiryType: "rental" }));
+                                if (fieldErrors.inquiryType) {
+                                  setFieldErrors((prev) => ({ ...prev, inquiryType: undefined }));
+                                }
+                              }}
+                              disabled={status === "submitting"}
+                              className={`relative z-10 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-display text-sm font-semibold tracking-wide transition-colors duration-200 ${
+                                formData.inquiryType === "rental"
+                                  ? "text-[var(--bg-primary)]"
+                                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                              } ${status === "submitting" ? "cursor-not-allowed opacity-60" : "cursor-pointer"}`}
+                            >
+                              <Package className={`w-4 h-4 transition-transform duration-300 ${
+                                formData.inquiryType === "rental" ? "scale-110" : ""
+                              }`} />
+                              <span>レンタル</span>
+                            </button>
+
+                            {/* Purchase Option */}
+                            <button
+                              type="button"
+                              role="radio"
+                              aria-checked={formData.inquiryType === "purchase"}
+                              onClick={() => {
+                                setFormData((prev) => ({ ...prev, inquiryType: "purchase" }));
+                                if (fieldErrors.inquiryType) {
+                                  setFieldErrors((prev) => ({ ...prev, inquiryType: undefined }));
+                                }
+                              }}
+                              disabled={status === "submitting"}
+                              className={`relative z-10 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-display text-sm font-semibold tracking-wide transition-colors duration-200 ${
+                                formData.inquiryType === "purchase"
+                                  ? "text-[var(--bg-primary)]"
+                                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                              } ${status === "submitting" ? "cursor-not-allowed opacity-60" : "cursor-pointer"}`}
+                            >
+                              <ShoppingBag className={`w-4 h-4 transition-transform duration-300 ${
+                                formData.inquiryType === "purchase" ? "scale-110" : ""
+                              }`} />
+                              <span>購入</span>
+                            </button>
+                          </div>
+                        </div>
+                        {fieldErrors.inquiryType && (
+                          <p className="mt-2 text-sm text-[var(--accent-error)]">
+                            {fieldErrors.inquiryType[0]}
+                          </p>
+                        )}
+                      </div>
+
                       <div>
                         <label
                           htmlFor="companyName"

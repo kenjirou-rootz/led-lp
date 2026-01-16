@@ -1,13 +1,21 @@
 import * as React from "react";
+import type { InquiryType } from "@/lib/validations/contact";
 
 interface ContactNotificationEmailProps {
+  inquiryType: InquiryType;
   companyName: string;
   name: string;
   email: string;
   message: string;
 }
 
+const inquiryTypeLabels: Record<InquiryType, string> = {
+  rental: "レンタル",
+  purchase: "購入",
+};
+
 export function ContactNotificationEmail({
+  inquiryType,
   companyName,
   name,
   email,
@@ -50,6 +58,40 @@ export function ContactNotificationEmail({
           }}
         >
           <tbody>
+            <tr>
+              <td
+                style={{
+                  padding: "12px 0",
+                  borderBottom: "1px solid #e5e7eb",
+                  color: "#6b7280",
+                  width: "120px",
+                  verticalAlign: "top",
+                }}
+              >
+                お問い合わせ種別
+              </td>
+              <td
+                style={{
+                  padding: "12px 0",
+                  borderBottom: "1px solid #e5e7eb",
+                  color: "#1f2937",
+                  fontWeight: "600",
+                }}
+              >
+                <span
+                  style={{
+                    display: "inline-block",
+                    padding: "4px 12px",
+                    backgroundColor: inquiryType === "rental" ? "#dbeafe" : "#fef3c7",
+                    color: inquiryType === "rental" ? "#1e40af" : "#92400e",
+                    borderRadius: "4px",
+                    fontSize: "14px",
+                  }}
+                >
+                  {inquiryTypeLabels[inquiryType]}
+                </span>
+              </td>
+            </tr>
             <tr>
               <td
                 style={{

@@ -36,13 +36,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { companyName, name, email, message } = result.data;
+    const { inquiryType, companyName, name, email, message } = result.data;
+
+    // お問い合わせ種別のラベル
+    const inquiryTypeLabel = inquiryType === "rental" ? "レンタル" : "購入";
 
     const { data, error } = await resend.emails.send({
       from: "LEDビジョンレンタル <onboarding@resend.dev>",
       to: [process.env.CONTACT_EMAIL],
-      subject: "【LEDビジョンレンタル】新規お問い合わせ",
+      subject: `【LEDビジョンレンタル】新規お問い合わせ（${inquiryTypeLabel}）`,
       react: ContactNotificationEmail({
+        inquiryType,
         companyName: companyName || "",
         name,
         email,
