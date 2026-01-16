@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, type HTMLMotionProps } from "motion/react";
-import { staggerContainer, staggerContainerFast, staggerContainerSlow, staggerItem, viewportOnce } from "@/lib/animations";
+import { staggerContainer, staggerContainerFast, staggerContainerSlow, staggerItem } from "@/lib/animations";
 
 type StaggerSpeed = "fast" | "normal" | "slow";
 
@@ -10,7 +10,7 @@ interface StaggerContainerProps extends Omit<HTMLMotionProps<"div">, "ref"> {
   once?: boolean;
 }
 
-interface StaggerItemProps extends Omit<HTMLMotionProps<"div">, "ref"> {}
+type StaggerItemProps = Omit<HTMLMotionProps<"div">, "ref">;
 
 const speedVariants = {
   fast: staggerContainerFast,

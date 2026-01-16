@@ -85,9 +85,14 @@ export function Reason({ reasonSectionData }: ReasonProps) {
 
   useEffect(() => {
     if (!emblaApi) return;
-    onSelect();
+
+    // Subscribe to events for state updates
     emblaApi.on("select", onSelect);
     emblaApi.on("reInit", onSelect);
+
+    // Trigger initial state via reInit event
+    emblaApi.reInit();
+
     return () => {
       emblaApi.off("select", onSelect);
       emblaApi.off("reInit", onSelect);

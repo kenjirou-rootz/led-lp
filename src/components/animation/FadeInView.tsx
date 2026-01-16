@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, type HTMLMotionProps } from "motion/react";
-import { fadeInUp, fadeIn, fadeInLeft, fadeInRight, viewportOnce } from "@/lib/animations";
+import { fadeInUp, fadeIn, fadeInLeft, fadeInRight } from "@/lib/animations";
 
 type Direction = "up" | "down" | "left" | "right" | "none";
 
