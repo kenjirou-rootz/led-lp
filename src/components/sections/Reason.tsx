@@ -135,11 +135,11 @@ export function Reason({ reasonSectionData }: ReasonProps) {
 
       {/* Carousel Container */}
       <div className="relative z-10">
-        {/* Navigation Buttons */}
+        {/* Navigation Buttons - visible on all screen sizes */}
         <button
           onClick={scrollPrev}
           disabled={!canScrollPrev}
-          className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 lg:-translate-x-6 z-20 w-12 h-12 rounded-xl bg-[var(--bg-card)] border border-[var(--border-default)] flex items-center justify-center transition-all duration-300 hidden md:flex ${
+          className={`absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 rounded-xl bg-[var(--bg-card)]/90 backdrop-blur-sm border border-[var(--border-default)] flex items-center justify-center transition-all duration-300 ${
             canScrollPrev
               ? "text-[var(--text-primary)] hover:border-[var(--accent-primary)] hover:shadow-[var(--glow-cyan-subtle)]"
               : "text-[var(--text-muted)] opacity-50 cursor-not-allowed"
@@ -152,7 +152,7 @@ export function Reason({ reasonSectionData }: ReasonProps) {
         <button
           onClick={scrollNext}
           disabled={!canScrollNext}
-          className={`absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 lg:translate-x-6 z-20 w-12 h-12 rounded-xl bg-[var(--bg-card)] border border-[var(--border-default)] flex items-center justify-center transition-all duration-300 hidden md:flex ${
+          className={`absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 rounded-xl bg-[var(--bg-card)]/90 backdrop-blur-sm border border-[var(--border-default)] flex items-center justify-center transition-all duration-300 ${
             canScrollNext
               ? "text-[var(--text-primary)] hover:border-[var(--accent-primary)] hover:shadow-[var(--glow-cyan-subtle)]"
               : "text-[var(--text-muted)] opacity-50 cursor-not-allowed"
@@ -163,7 +163,7 @@ export function Reason({ reasonSectionData }: ReasonProps) {
         </button>
 
         {/* Embla Carousel */}
-        <div className="overflow-hidden px-1" ref={emblaRef}>
+        <div className="overflow-hidden px-12 md:px-16" ref={emblaRef}>
           <div className="flex gap-6">
             {items.map((item, index) => (
               <motion.div

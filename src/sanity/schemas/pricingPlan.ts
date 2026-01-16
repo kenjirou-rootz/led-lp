@@ -46,6 +46,23 @@ export default defineType({
       initialValue: false,
     }),
     defineField({
+      name: 'image',
+      title: 'プラン画像',
+      type: 'image',
+      description: 'プランカードに表示する画像（16:9推奨）',
+      options: {
+        hotspot: true,
+      },
+      fields: [
+        {
+          name: 'alt',
+          type: 'string',
+          title: '代替テキスト',
+          description: '画像の説明（アクセシビリティ用）',
+        },
+      ],
+    }),
+    defineField({
       name: 'order',
       title: '表示順',
       type: 'number',

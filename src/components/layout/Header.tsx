@@ -15,6 +15,23 @@ const navLinks = [
   { label: "FAQ", href: "#faq" },
 ];
 
+// スムーズスクロール関数
+const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  e.preventDefault();
+  const targetId = href.replace("#", "");
+  const element = document.getElementById(targetId);
+  if (element) {
+    const headerHeight = 80; // ヘッダーの高さ分オフセット
+    const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+    const offsetPosition = elementPosition - headerHeight;
+
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: "smooth",
+    });
+  }
+};
+
 interface HeaderProps {
   siteSettings?: SiteSettings;
 }
@@ -94,6 +111,7 @@ export function Header({ siteSettings }: HeaderProps) {
               <motion.a
                 key={link.href}
                 href={link.href}
+                onClick={(e) => scrollToSection(e, link.href)}
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
@@ -200,7 +218,10 @@ export function Header({ siteSettings }: HeaderProps) {
                   <motion.a
                     key={link.href}
                     href={link.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    onClick={(e) => {
+                      scrollToSection(e, link.href);
+                      setIsMobileMenuOpen(false);
+                    }}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{

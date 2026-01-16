@@ -109,6 +109,8 @@ export const queries = {
     recommendedFor,
     features,
     isPopular,
+    "imageUrl": image.asset->url,
+    "imageAlt": image.alt,
     order
   }`,
   faqs: `*[_type == "faq"] | order(order asc){
@@ -233,6 +235,8 @@ export interface PricingPlanData {
   recommendedFor?: string;
   features?: string[];
   isPopular?: boolean;
+  imageUrl?: string;
+  imageAlt?: string;
   order: number;
 }
 

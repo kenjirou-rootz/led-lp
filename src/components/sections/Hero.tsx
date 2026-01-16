@@ -12,6 +12,95 @@ import {
   heroStatItem,
 } from "@/lib/animations";
 
+// Animated Dot Wave Component - Fine dot pattern with multiply blend (Optimized)
+function AnimatedDotWave() {
+  return (
+    <div
+      className="absolute inset-0 pointer-events-none"
+      style={{
+        backgroundImage: `
+          radial-gradient(circle, rgba(0, 0, 0, 0.8) 0.8px, transparent 0.8px),
+          radial-gradient(circle, rgba(0, 0, 0, 0.8) 0.8px, transparent 0.8px)
+        `,
+        backgroundSize: '4px 4px',
+        backgroundPosition: '0 0, 2px 2px',
+        mixBlendMode: 'multiply',
+      }}
+    />
+  );
+}
+
+// Animated organic gradient overlay - 蠢くグラデーション (Optimized: 5→3 elements, reduced blur)
+function AnimatedGradientOverlay() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Primary soft dark blob - GPU optimized */}
+      <motion.div
+        className="absolute w-[200%] h-[200%]"
+        style={{
+          background: `
+            radial-gradient(ellipse 50% 50% at 50% 50%, transparent 0%, transparent 20%, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0.7) 100%)
+          `,
+          filter: 'blur(50px)',
+          willChange: 'transform',
+        }}
+        animate={{
+          x: ['-50%', '-30%', '-60%', '-40%', '-50%'],
+          y: ['-50%', '-40%', '-55%', '-45%', '-50%'],
+        }}
+        transition={{
+          duration: 12,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
+
+      {/* Secondary dark area - combined layer */}
+      <motion.div
+        className="absolute w-[180%] h-[180%]"
+        style={{
+          background: `
+            radial-gradient(ellipse 45% 45% at 50% 50%, transparent 0%, transparent 25%, rgba(0, 0, 0, 0.45) 55%, rgba(0, 0, 0, 0.6) 100%)
+          `,
+          filter: 'blur(40px)',
+          willChange: 'transform',
+        }}
+        animate={{
+          x: ['-40%', '-25%', '-50%', '-35%', '-40%'],
+          y: ['-40%', '-50%', '-30%', '-45%', '-40%'],
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
+
+      {/* Orange glow - combined and optimized */}
+      <motion.div
+        className="absolute w-[150%] h-[150%]"
+        style={{
+          background: `
+            radial-gradient(ellipse 50% 50% at 50% 50%, rgba(255, 100, 0, 0.4) 0%, rgba(255, 80, 0, 0.2) 35%, transparent 65%)
+          `,
+          filter: 'blur(20px)',
+          mixBlendMode: 'overlay',
+          willChange: 'transform',
+        }}
+        animate={{
+          x: ['-25%', '0%', '-30%', '-10%', '-25%'],
+          y: ['-25%', '-35%', '-15%', '-30%', '-25%'],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
+    </div>
+  );
+}
+
 interface HeroProps {
   headline?: string;
   subheadline?: string;
@@ -110,27 +199,23 @@ export function Hero({
         {/* Base Background (Video/Image) */}
         {renderBackground()}
 
-        {/* Dark Overlay with gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-primary)]/60 via-[var(--bg-primary)]/80 to-[var(--bg-primary)]" />
+        {/* Minimal dark overlay for readability - bottom only */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[var(--bg-primary)]" />
+
+        {/* Animated organic gradient overlay - 蠢くグラデーション */}
+        <AnimatedGradientOverlay />
 
         {/* LED Pixel Grid Pattern */}
-        <div className="absolute inset-0 bg-pixel-grid opacity-40" />
+        <div className="absolute inset-0 bg-pixel-grid opacity-30" />
 
         {/* Scanline Effect */}
-        <div className="absolute inset-0 scanline-overlay opacity-30" />
+        <div className="absolute inset-0 scanline-overlay opacity-20" />
 
-        {/* Spotlight from top center - Orange themed */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[200%] h-[80%] bg-[radial-gradient(ellipse_at_50%_0%,rgba(255,107,0,0.15)_0%,transparent_60%)]" />
-
-        {/* Secondary glow - bottom accent with warm orange */}
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[150%] h-[40%] bg-[radial-gradient(ellipse_at_50%_100%,rgba(255,149,0,0.1)_0%,transparent_60%)]" />
-
-        {/* Subtle side glows */}
-        <div className="absolute top-1/3 left-0 w-[30%] h-[60%] bg-[radial-gradient(ellipse_at_0%_50%,rgba(255,107,0,0.08)_0%,transparent_70%)]" />
-        <div className="absolute top-1/3 right-0 w-[30%] h-[60%] bg-[radial-gradient(ellipse_at_100%_50%,rgba(255,149,0,0.06)_0%,transparent_70%)]" />
+        {/* Animated Dot Wave Pattern */}
+        <AnimatedDotWave />
 
         {/* Noise texture */}
-        <div className="absolute inset-0 bg-noise opacity-50" />
+        <div className="absolute inset-0 bg-noise opacity-40" />
       </div>
 
       {/* ===== Main Content ===== */}
@@ -175,7 +260,7 @@ export function Hero({
             variants={heroSubheadline}
             initial="hidden"
             animate="visible"
-            className="mt-8 text-lg md:text-xl text-[var(--text-secondary)] leading-relaxed max-w-2xl text-center md:text-left mx-auto md:mx-0"
+            className="mt-8 text-lg md:text-xl text-white leading-relaxed max-w-2xl text-center md:text-left mx-auto md:mx-0"
           >
             {subheadline}
           </motion.p>
@@ -219,11 +304,11 @@ export function Hero({
                   variants={heroStatItem}
                   className="text-center md:text-left"
                 >
-                  <div className="flex items-baseline justify-center md:justify-start gap-1">
-                    <span className="font-display text-3xl md:text-5xl font-black text-[var(--text-primary)] tracking-tight">
+                  <div className="flex items-baseline justify-center md:justify-start gap-1 whitespace-nowrap">
+                    <span className="font-display text-2xl sm:text-3xl md:text-5xl font-black text-[var(--text-primary)] tracking-tight">
                       {stat.value}
                     </span>
-                    <span className="font-display text-lg md:text-2xl font-bold text-[var(--accent-cta)]">
+                    <span className="font-display text-base sm:text-lg md:text-2xl font-bold text-[var(--accent-cta)]">
                       {stat.suffix}
                     </span>
                   </div>
