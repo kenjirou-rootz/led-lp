@@ -4,7 +4,7 @@ export const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
   apiVersion: "2024-01-01",
-  useCdn: false, // 開発時はfalse、本番ではrevalidateで制御
+  useCdn: true, // タグベースrevalidationでCDNキャッシュを活用
 });
 
 export async function sanityFetch<T>({
