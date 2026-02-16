@@ -48,7 +48,7 @@ export default defineType({
               title: '背景画像',
               type: 'image',
               options: { hotspot: true },
-              validation: (Rule) => Rule.required(),
+              description: '背景画像（未設定の場合はデフォルト表示）',
               fields: [
                 defineField({
                   name: 'alt',
