@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import {
   ArrowRight,
   Phone,
+  Mail,
   Clock,
   Loader2,
   CheckCircle,
@@ -61,6 +62,7 @@ export function CTA({
   const displaySubheadline = ctaData?.subHeadline || subheadline || "専門スタッフが最適なプランをご提案します。お見積りは無料です。";
   const displayPhone = ctaData?.contactInfo?.phone || phone || siteSettings?.contactPhone || "0120-XXX-XXX";
   const displayPhoneNote = ctaData?.contactInfo?.phoneNote || phoneNote || "平日 11:00〜19:00";
+  const displayEmail = ctaData?.contactInfo?.email || siteSettings?.contactEmail || "info@example.com";
 
   const [formData, setFormData] = useState<ContactFormData>({
     inquiryType: "rental",
@@ -457,40 +459,59 @@ export function CTA({
                       <Phone className="w-5 h-5 text-[var(--accent-primary)]" />
                     </div>
                     <h3 className="font-display text-lg font-bold text-[var(--text-primary)] tracking-wide">
-                      お電話でのお問い合わせ
+                      お電話・メールでも
                     </h3>
                   </div>
 
                   <div className="space-y-6 flex-1">
-                    {/* Phone */}
+                    {/* Email */}
                     <motion.div
                       initial={{ opacity: 0, x: 20 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       viewport={{ once: true }}
                       transition={{ delay: 0.3 }}
-                      className="group flex items-start gap-4 p-5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-default)] transition-all duration-300 hover:border-[var(--accent-primary)]/40 hover:shadow-[var(--glow-card-hover)]"
+                      className="group flex items-start gap-4 p-5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-default)] transition-all duration-300 hover:border-[var(--accent-cta)]/40 hover:shadow-[0_0_30px_rgba(255,107,0,0.1)]"
                     >
-                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-primary)]/60 flex items-center justify-center flex-shrink-0 shadow-[var(--glow-cyan-subtle)]">
-                        <Phone className="w-5 h-5 text-white" />
+                      <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[var(--accent-cta)] to-[var(--accent-cta)]/60 flex items-center justify-center flex-shrink-0 shadow-[var(--glow-orange)]">
+                        <Mail className="w-6 h-6 text-white" />
                       </div>
                       <div>
                         <p className="font-display text-[10px] text-[var(--text-muted)] uppercase tracking-[0.15em] mb-1">
-                          Telephone
+                          Email
                         </p>
                         <a
+                          href={`mailto:${displayEmail}`}
+                          className="font-display text-lg font-bold text-[var(--text-primary)] hover:text-[var(--accent-cta)] transition-colors tracking-wide break-all"
+                        >
+                          {displayEmail}
+                        </a>
+                      </div>
+                    </motion.div>
+
+                    {/* Phone - 控えめテキスト表示 */}
+                    <motion.div
+                      initial={{ opacity: 0, x: 20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.4 }}
+                      className="px-2"
+                    >
+                      <div className="flex items-center gap-2 text-[var(--text-muted)]">
+                        <Phone className="w-3.5 h-3.5" />
+                        <a
                           href={`tel:${displayPhone.replace(/-/g, "")}`}
-                          className="font-display text-xl font-bold text-[var(--text-primary)] hover:text-[var(--accent-primary)] transition-colors tracking-wide"
+                          className="text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-colors"
                         >
                           {displayPhone}
                         </a>
-                        <p className="text-sm text-[var(--text-muted)] flex items-center gap-1.5 mt-2">
-                          <Clock className="w-3.5 h-3.5" />
+                        <span className="text-xs text-[var(--text-muted)] flex items-center gap-1">
+                          <Clock className="w-3 h-3" />
                           {displayPhoneNote}
-                        </p>
-                        <p className="text-xs text-[var(--text-muted)] mt-1">
-                          休日（土日・祝祭日）休業
-                        </p>
+                        </span>
                       </div>
+                      <p className="text-xs text-[var(--text-muted)] mt-1 ml-5.5">
+                        休日（土日・祝祭日）休業
+                      </p>
                     </motion.div>
                   </div>
                 </div>

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Menu, X, Phone, Zap } from "lucide-react";
+import { Menu, X, Zap } from "lucide-react";
 import Image from "next/image";
 import { Container } from "@/components/ui";
 import { Button } from "@/components/ui";
@@ -39,7 +39,6 @@ interface HeaderProps {
 
 export function Header({ siteSettings }: HeaderProps) {
   const siteName = siteSettings?.siteName || "Rootz LED";
-  const phoneNumber = siteSettings?.contactPhone || "0120-XXX-XXX";
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -143,24 +142,6 @@ export function Header({ siteSettings }: HeaderProps) {
 
           {/* CTA Area */}
           <div className="hidden md:flex items-center gap-4">
-            {/* Phone */}
-            <motion.a
-              href={`tel:${phoneNumber.replace(/-/g, "")}`}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-[--text-secondary] hover:text-[--accent-primary] hover:bg-[--accent-primary]/5 transition-all duration-300 group"
-            >
-              <div className="relative">
-                <Phone className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" />
-                {/* Phone icon glow */}
-                <div className="absolute inset-0 blur-md bg-[--accent-primary] opacity-0 group-hover:opacity-40 transition-opacity duration-300" />
-              </div>
-              <span className="font-display text-sm tracking-wide font-medium">
-                {phoneNumber}
-              </span>
-            </motion.a>
-
             {/* CTA Button */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
@@ -251,18 +232,8 @@ export function Header({ siteSettings }: HeaderProps) {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.3 }}
-                  className="pt-4 mt-4 border-t border-[--border-default] space-y-4"
+                  className="pt-4 mt-4 border-t border-[--border-default]"
                 >
-                  <a
-                    href={`tel:${phoneNumber.replace(/-/g, "")}`}
-                    className="flex items-center gap-3 px-4 py-2 text-[--text-secondary] hover:text-[--accent-primary] transition-colors duration-300 group"
-                  >
-                    <div className="relative">
-                      <Phone className="w-5 h-5" />
-                      <div className="absolute inset-0 blur-md bg-[--accent-primary] opacity-0 group-hover:opacity-40 transition-opacity duration-300" />
-                    </div>
-                    <span className="font-display tracking-wide">{phoneNumber}</span>
-                  </a>
                   <Button className="w-full bg-gradient-to-r from-[--accent-cta] to-[--accent-cta-hover] hover:shadow-[var(--glow-orange)] transition-shadow duration-300 font-display tracking-wide">
                     無料相談
                   </Button>
