@@ -23,7 +23,8 @@ export default defineType({
       name: 'question',
       title: '質問',
       type: 'string',
-      validation: (Rule) => Rule.required(),
+      description: '推奨80字以内',
+      validation: (Rule) => Rule.required().max(80),
     }),
     defineField({
       name: 'answer',

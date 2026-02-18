@@ -24,6 +24,8 @@ import {
   type FAQData,
   type ClientLogoData,
   type UseCaseData,
+  type CTASectionData,
+  type FooterData,
 } from "@/lib/sanity";
 
 export default async function Home() {
@@ -39,6 +41,8 @@ export default async function Home() {
     faqsData,
     clientLogosData,
     useCasesData,
+    ctaData,
+    footerData,
   ] = await Promise.all([
     sanityFetch<SiteSettings>({
       query: queries.siteSettings,
@@ -80,6 +84,14 @@ export default async function Home() {
       query: queries.useCases,
       tags: ["useCase"],
     }),
+    sanityFetch<CTASectionData>({
+      query: queries.ctaSection,
+      tags: ["cta"],
+    }),
+    sanityFetch<FooterData>({
+      query: queries.footer,
+      tags: ["footer"],
+    }),
   ]);
 
   return (
@@ -93,6 +105,8 @@ export default async function Home() {
           backgroundImageUrl={heroData?.backgroundImageUrl}
           backgroundVideoUrl={heroData?.backgroundVideoUrl}
           youtubeUrl={heroData?.youtubeUrl}
+          ctaText={heroData?.ctaText}
+          ctaLink={heroData?.ctaLink}
         />
         <Problem problemSectionData={problemsData} />
         <Reason reasonSectionData={reasonsData} />
@@ -102,9 +116,9 @@ export default async function Home() {
         <UseCases useCasesData={useCasesData} />
         <Pricing pricingPlansData={pricingPlansData} />
         <FAQ faqsData={faqsData} />
-        <CTA siteSettings={siteSettings} />
+        <CTA siteSettings={siteSettings} ctaData={ctaData} />
       </main>
-      <Footer siteSettings={siteSettings} />
+      <Footer siteSettings={siteSettings} footerData={footerData} />
     </>
   );
 }

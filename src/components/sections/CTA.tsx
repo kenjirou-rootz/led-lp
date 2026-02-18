@@ -5,7 +5,6 @@ import { motion } from "motion/react";
 import {
   ArrowRight,
   Phone,
-  Mail,
   Clock,
   Loader2,
   CheckCircle,
@@ -27,7 +26,7 @@ import {
   contactSchema,
   type ContactFormData,
 } from "@/lib/validations/contact";
-import type { SiteSettings } from "@/lib/sanity";
+import type { SiteSettings, CTASectionData } from "@/lib/sanity";
 
 interface CTAProps {
   headline?: string;
@@ -36,6 +35,7 @@ interface CTAProps {
   phoneNote?: string;
   email?: string;
   siteSettings?: SiteSettings;
+  ctaData?: CTASectionData;
 }
 
 type FormStatus = "idle" | "submitting" | "success" | "error";
@@ -49,16 +49,19 @@ interface FieldErrors {
 }
 
 export function CTA({
-  headline = "まずはお気軽にご相談ください",
-  subheadline = "専門スタッフが最適なプランをご提案します。お見積りは無料です。",
+  headline,
+  subheadline,
   phone,
-  phoneNote = "平日 9:00-18:00",
-  email,
+  phoneNote,
   siteSettings,
+  ctaData,
 }: CTAProps) {
-  // siteSettingsからのデータまたはprops、最後にデフォルト値
-  const displayPhone = phone || siteSettings?.contactPhone || "0120-XXX-XXX";
-  const displayEmail = email || siteSettings?.contactEmail || "info@example.com";
+  // データ優先順位: ctaData → 個別props → siteSettings → デフォルト値
+  const displayHeadline = ctaData?.headline || headline || "まずはお気軽にご相談ください";
+  const displaySubheadline = ctaData?.subHeadline || subheadline || "専門スタッフが最適なプランをご提案します。お見積りは無料です。";
+  const displayPhone = ctaData?.contactInfo?.phone || phone || siteSettings?.contactPhone || "0120-XXX-XXX";
+  const displayPhoneNote = ctaData?.contactInfo?.phoneNote || phoneNote || "平日 11:00〜19:00";
+
   const [formData, setFormData] = useState<ContactFormData>({
     inquiryType: "rental",
     companyName: "",
@@ -160,8 +163,8 @@ export function CTA({
 
           {/* Title */}
           <motion.h2 variants={sectionTitle} className="section-title">
-            <span className="text-gradient-orange">{headline.slice(0, 4)}</span>
-            <span>{headline.slice(4)}</span>
+            <span className="text-gradient-orange">{displayHeadline.slice(0, 4)}</span>
+            <span>{displayHeadline.slice(4)}</span>
           </motion.h2>
 
           {/* Subtitle */}
@@ -169,7 +172,7 @@ export function CTA({
             variants={sectionSubtitle}
             className="mt-4 section-subtitle max-w-2xl mx-auto"
           >
-            {subheadline}
+            {displaySubheadline}
           </motion.p>
         </motion.div>
 
@@ -454,7 +457,7 @@ export function CTA({
                       <Phone className="w-5 h-5 text-[var(--accent-primary)]" />
                     </div>
                     <h3 className="font-display text-lg font-bold text-[var(--text-primary)] tracking-wide">
-                      お電話・メールでも
+                      お電話でのお問い合わせ
                     </h3>
                   </div>
 
@@ -467,8 +470,8 @@ export function CTA({
                       transition={{ delay: 0.3 }}
                       className="group flex items-start gap-4 p-5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-default)] transition-all duration-300 hover:border-[var(--accent-primary)]/40 hover:shadow-[var(--glow-card-hover)]"
                     >
-                      <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-primary)]/60 flex items-center justify-center flex-shrink-0 shadow-[var(--glow-cyan-subtle)]">
-                        <Phone className="w-6 h-6 text-white" />
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-primary)]/60 flex items-center justify-center flex-shrink-0 shadow-[var(--glow-cyan-subtle)]">
+                        <Phone className="w-5 h-5 text-white" />
                       </div>
                       <div>
                         <p className="font-display text-[10px] text-[var(--text-muted)] uppercase tracking-[0.15em] mb-1">
@@ -476,71 +479,20 @@ export function CTA({
                         </p>
                         <a
                           href={`tel:${displayPhone.replace(/-/g, "")}`}
-                          className="font-display text-2xl font-bold text-[var(--text-primary)] hover:text-[var(--accent-primary)] transition-colors tracking-wide"
+                          className="font-display text-xl font-bold text-[var(--text-primary)] hover:text-[var(--accent-primary)] transition-colors tracking-wide"
                         >
                           {displayPhone}
                         </a>
                         <p className="text-sm text-[var(--text-muted)] flex items-center gap-1.5 mt-2">
                           <Clock className="w-3.5 h-3.5" />
-                          {phoneNote}
+                          {displayPhoneNote}
                         </p>
-                      </div>
-                    </motion.div>
-
-                    {/* Email */}
-                    <motion.div
-                      initial={{ opacity: 0, x: 20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: 0.4 }}
-                      className="group flex items-start gap-4 p-5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-default)] transition-all duration-300 hover:border-[var(--accent-cta)]/40 hover:shadow-[0_0_30px_rgba(255,107,0,0.1)]"
-                    >
-                      <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[var(--accent-cta)] to-[var(--accent-cta)]/60 flex items-center justify-center flex-shrink-0 shadow-[var(--glow-orange)]">
-                        <Mail className="w-6 h-6 text-white" />
-                      </div>
-                      <div>
-                        <p className="font-display text-[10px] text-[var(--text-muted)] uppercase tracking-[0.15em] mb-1">
-                          Email
-                        </p>
-                        <a
-                          href={`mailto:${displayEmail}`}
-                          className="font-display text-lg font-bold text-[var(--text-primary)] hover:text-[var(--accent-cta)] transition-colors tracking-wide break-all"
-                        >
-                          {displayEmail}
-                        </a>
-                        <p className="text-sm text-[var(--text-muted)] mt-2">
-                          24時間受付
+                        <p className="text-xs text-[var(--text-muted)] mt-1">
+                          休日（土日・祝祭日）休業
                         </p>
                       </div>
                     </motion.div>
                   </div>
-
-                  {/* Quick Response Promise */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.5 }}
-                    className="mt-6 pt-6 border-t border-[var(--border-default)]"
-                  >
-                    <div className="relative rounded-xl bg-gradient-to-r from-[var(--accent-success)]/5 to-transparent border border-[var(--accent-success)]/20 p-5 overflow-hidden">
-                      {/* Decorative corner */}
-                      <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-[var(--accent-success)]/10 to-transparent" />
-                      <div className="flex items-start gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-[var(--accent-success)]/20 flex items-center justify-center flex-shrink-0">
-                          <CheckCircle className="w-4 h-4 text-[var(--accent-success)]" />
-                        </div>
-                        <p className="text-sm text-[var(--text-secondary)]">
-                          <span className="text-[var(--accent-success)] font-display font-bold">
-                            通常1営業日以内
-                          </span>
-                          にご返信いたします。
-                          <br />
-                          お急ぎの場合はお電話ください。
-                        </p>
-                      </div>
-                    </div>
-                  </motion.div>
                 </div>
               </div>
             </div>

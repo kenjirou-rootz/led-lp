@@ -38,7 +38,9 @@ export const queries = {
     contactEmail,
     contactPhone,
     companyName,
-    companyAddress
+    companyAddress,
+    "logoUrl": logo.asset->url,
+    "logoAlt": logo.alt
   }`,
   hero: `*[_type == "hero"][0]{
     headline,
@@ -145,6 +147,25 @@ export const queries = {
     },
     order
   }`,
+  ctaSection: `*[_type == "cta"][0]{
+    headline,
+    subHeadline,
+    primaryButtonText,
+    primaryButtonLink,
+    secondaryButtonText,
+    secondaryButtonLink,
+    contactInfo{ phone, phoneNote, email },
+    "backgroundImageUrl": backgroundImage.asset->url
+  }`,
+  footer: `*[_type == "footer"][0]{
+    companyDescription,
+    linkCategories[]{ title, links[]{ label, href } },
+    phone,
+    phoneNote,
+    address,
+    email,
+    copyright
+  }`,
 };
 
 // 型定義
@@ -155,6 +176,8 @@ export interface SiteSettings {
   contactPhone?: string;
   companyName?: string;
   companyAddress?: string;
+  logoUrl?: string;
+  logoAlt?: string;
 }
 
 export interface HeroData {
@@ -273,4 +296,39 @@ export interface UseCaseData {
     caption?: string;
   }>;
   order: number;
+}
+
+export interface CTASectionData {
+  headline?: string;
+  subHeadline?: string;
+  primaryButtonText?: string;
+  primaryButtonLink?: string;
+  secondaryButtonText?: string;
+  secondaryButtonLink?: string;
+  contactInfo?: {
+    phone?: string;
+    phoneNote?: string;
+    email?: string;
+  };
+  backgroundImageUrl?: string;
+}
+
+export interface FooterLinkItem {
+  label: string;
+  href: string;
+}
+
+export interface FooterLinkCategory {
+  title: string;
+  links?: FooterLinkItem[];
+}
+
+export interface FooterData {
+  companyDescription?: string;
+  linkCategories?: FooterLinkCategory[];
+  phone?: string;
+  phoneNote?: string;
+  address?: string;
+  email?: string;
+  copyright?: string;
 }

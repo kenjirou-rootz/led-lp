@@ -9,6 +9,7 @@ import useCase from './useCase'
 import pricingPlan from './pricingPlan'
 import faq from './faq'
 import cta from './cta'
+import footer from './footer'
 
 export const schemaTypes = [
   // グローバル設定
@@ -25,4 +26,5 @@ export const schemaTypes = [
   pricingPlan,    // 6. 価格透明性セクション
   faq,            // 7. FAQセクション
   cta,            // 8. CTAセクション
+  footer,         // 9. フッター設定
 ]

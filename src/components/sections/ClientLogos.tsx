@@ -26,14 +26,12 @@ const defaultLogos: ClientLogo[] = [
 
 interface ClientLogosProps {
   title?: string;
-  subtitle?: string;
   logos?: ClientLogo[];
   clientLogosData?: ClientLogoData[];
 }
 
 export function ClientLogos({
   title = "主要取引先",
-  subtitle = "東証プライム上場企業を含む、多くの企業様にご利用いただいています。",
   logos = defaultLogos,
   clientLogosData,
 }: ClientLogosProps) {
@@ -78,10 +76,6 @@ export function ClientLogos({
             <span>{title.slice(2)}</span>
           </h3>
 
-          {/* Subtitle */}
-          <p className="section-subtitle max-w-xl mx-auto">
-            {subtitle}
-          </p>
         </FadeInView>
       </div>
 
@@ -138,36 +132,6 @@ export function ClientLogos({
         </motion.div>
       </div>
 
-      {/* Stats Row */}
-      <FadeInView delay={0.2}>
-        <div className="mt-12 flex justify-center gap-8 md:gap-16 relative z-10">
-          {[
-            { value: "50+", label: "取引企業" },
-            { value: "3,500+", label: "累計案件" },
-            { value: "98%", label: "継続率" },
-          ].map((stat, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{
-                duration: 0.5,
-                delay: 0.3 + index * 0.1,
-                ease: [0.19, 1, 0.22, 1],
-              }}
-              className="text-center"
-            >
-              <div className="font-display text-2xl md:text-3xl font-bold text-[var(--accent-primary)] tracking-tight">
-                {stat.value}
-              </div>
-              <div className="text-xs text-[var(--text-muted)] uppercase tracking-wider mt-1">
-                {stat.label}
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </FadeInView>
     </Section>
   );
 }

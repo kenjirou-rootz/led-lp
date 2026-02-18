@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Menu, X, Phone, Zap } from "lucide-react";
+import Image from "next/image";
 import { Container } from "@/components/ui";
 import { Button } from "@/components/ui";
 import type { SiteSettings } from "@/lib/sanity";
@@ -85,11 +86,21 @@ export function Header({ siteSettings }: HeaderProps) {
             whileHover={{ scale: 1.02 }}
             transition={{ duration: 0.3 }}
           >
-            {/* LED Icon Mark */}
+            {/* Logo / Icon Mark */}
             <div className="relative">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[--accent-primary] via-[--accent-secondary] to-[--accent-primary] flex items-center justify-center transition-all duration-300 group-hover:shadow-[var(--glow-cyan)]">
-                <Zap className="w-5 h-5 text-white fill-white" />
-              </div>
+              {siteSettings?.logoUrl ? (
+                <Image
+                  src={siteSettings.logoUrl}
+                  alt={siteSettings.logoAlt || siteName}
+                  width={40}
+                  height={40}
+                  className="w-10 h-10 rounded-xl object-contain transition-all duration-300 group-hover:shadow-[var(--glow-cyan)]"
+                />
+              ) : (
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[--accent-primary] via-[--accent-secondary] to-[--accent-primary] flex items-center justify-center transition-all duration-300 group-hover:shadow-[var(--glow-cyan)]">
+                  <Zap className="w-5 h-5 text-white fill-white" />
+                </div>
+              )}
               {/* Glow effect */}
               <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-[--accent-primary] to-[--accent-secondary] blur-lg opacity-0 group-hover:opacity-40 transition-opacity duration-300" />
             </div>

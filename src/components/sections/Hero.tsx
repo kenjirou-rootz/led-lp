@@ -1,15 +1,13 @@
 "use client";
 
 import { motion } from "motion/react";
-import { ArrowRight, Zap, Shield, TrendingUp } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Container, Button } from "@/components/ui";
 import {
   heroOverline,
   heroHeadline,
   heroSubheadline,
   heroCTA,
-  heroStats,
-  heroStatItem,
 } from "@/lib/animations";
 
 // Animated Dot Wave Component - Fine dot pattern with multiply blend (Optimized)
@@ -109,14 +107,9 @@ interface HeroProps {
   backgroundVideoUrl?: string;
   youtubeUrl?: string;
   posterUrl?: string;
+  ctaText?: string;
+  ctaLink?: string;
 }
-
-// Stats data - LED themed metrics
-const heroMetrics = [
-  { value: "15", suffix: "年", label: "業界実績", icon: TrendingUp },
-  { value: "3,500", suffix: "件+", label: "累計案件", icon: Zap },
-  { value: "50", suffix: "社+", label: "取引企業", icon: Shield },
-];
 
 // YouTube URLからビデオIDを抽出
 function extractYouTubeId(url: string): string | null {
@@ -126,13 +119,15 @@ function extractYouTubeId(url: string): string | null {
 }
 
 export function Hero({
-  headline = "イベントの成功は映像演出で決まる。、映像演出で確実なものに。",
+  headline,
   subheadline = "業界15年・累計3,500件の実績。確実に成功へ導く映像のプロ集団",
   backgroundType = "image",
   backgroundImageUrl,
   backgroundVideoUrl,
   youtubeUrl,
   posterUrl = "/images/hero-poster.jpg",
+  ctaText = "無料で相談する",
+  ctaLink = "cta",
 }: HeroProps) {
   const youtubeId = youtubeUrl ? extractYouTubeId(youtubeUrl) : null;
 
@@ -189,8 +184,35 @@ export function Hero({
     );
   };
 
-  // Split headline for styled rendering
-  const headlineParts = headline.split("、");
+  // ヘッドラインの表示処理
+  const renderHeadline = () => {
+    if (!headline) return null;
+
+    // 「、」で分割して2行表示
+    if (headline.includes("、")) {
+      const headlineParts = headline.split("、");
+      return (
+        <>
+          <span className="text-gradient-orange text-glow-orange">{headlineParts[0]}、</span>
+          <br className="hidden sm:block" />
+          <span className="text-[var(--text-primary)]">
+            {headlineParts.slice(1).join("、")}
+          </span>
+        </>
+      );
+    }
+
+    // 「、」がない場合は1行表示
+    return (
+      <span className="text-gradient-orange text-glow-orange">{headline}</span>
+    );
+  };
+
+  // CTAボタンのクリックハンドラ
+  const handleCtaClick = () => {
+    const targetId = ctaLink.replace("#", "");
+    document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
@@ -240,20 +262,18 @@ export function Hero({
           </motion.div>
 
           {/* Main Headline - Orange gradient */}
-          <motion.h1
-            variants={heroHeadline}
-            initial="hidden"
-            animate="visible"
-            className="text-center md:text-left"
-          >
-            <span className="block font-display text-[clamp(2.5rem,7vw,5rem)] font-black leading-[1.1] tracking-wide">
-              <span className="text-gradient-orange text-glow-orange">{headlineParts[0]}、</span>
-              <br className="hidden sm:block" />
-              <span className="text-[var(--text-primary)]">
-                {headlineParts[1] || "映像演出で確実なものに。"}
+          {headline && (
+            <motion.h1
+              variants={heroHeadline}
+              initial="hidden"
+              animate="visible"
+              className="text-center md:text-left"
+            >
+              <span className="block font-display text-[clamp(2.5rem,7vw,5rem)] font-black leading-[1.1] tracking-wide">
+                {renderHeadline()}
               </span>
-            </span>
-          </motion.h1>
+            </motion.h1>
+          )}
 
           {/* Subheadline */}
           <motion.p
@@ -265,12 +285,12 @@ export function Hero({
             {subheadline}
           </motion.p>
 
-          {/* CTA Buttons */}
+          {/* CTA Button */}
           <motion.div
             variants={heroCTA}
             initial="hidden"
             animate="visible"
-            className="mt-10 flex flex-col sm:flex-row gap-4 justify-center md:justify-start"
+            className="mt-10 flex justify-center md:justify-start"
           >
             <Button
               size="lg"
@@ -278,49 +298,10 @@ export function Hero({
               rightIcon={
                 <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
               }
+              onClick={handleCtaClick}
             >
-              <span className="relative z-10">無料で相談する</span>
+              <span className="relative z-10">{ctaText}</span>
             </Button>
-            <Button
-              variant="secondary"
-              size="lg"
-              className="backdrop-blur-sm border-[var(--accent-cta)]/30 hover:border-[var(--accent-cta)]/60"
-            >
-              サービス詳細を見る
-            </Button>
-          </motion.div>
-
-          {/* Stats Row - Orange accents */}
-          <motion.div
-            variants={heroStats}
-            initial="hidden"
-            animate="visible"
-            className="mt-16 pt-10 border-t border-[var(--accent-cta)]/20"
-          >
-            <div className="grid grid-cols-3 gap-6 md:gap-12">
-              {heroMetrics.map((stat, index) => (
-                <motion.div
-                  key={index}
-                  variants={heroStatItem}
-                  className="text-center md:text-left"
-                >
-                  <div className="flex items-baseline justify-center md:justify-start gap-1 whitespace-nowrap">
-                    <span className="font-display text-2xl sm:text-3xl md:text-5xl font-black text-[var(--text-primary)] tracking-tight">
-                      {stat.value}
-                    </span>
-                    <span className="font-display text-base sm:text-lg md:text-2xl font-bold text-[var(--accent-cta)]">
-                      {stat.suffix}
-                    </span>
-                  </div>
-                  <div className="mt-2 flex items-center justify-center md:justify-start gap-2">
-                    <stat.icon className="w-4 h-4 text-[var(--accent-cta)] opacity-60" />
-                    <span className="text-sm text-[var(--text-muted)] uppercase tracking-wide">
-                      {stat.label}
-                    </span>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
           </motion.div>
         </div>
       </Container>

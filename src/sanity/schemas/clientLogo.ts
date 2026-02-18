@@ -9,7 +9,8 @@ export default defineType({
       name: 'companyName',
       title: '会社名',
       type: 'string',
-      validation: (Rule) => Rule.required(),
+      description: '推奨30字以内',
+      validation: (Rule) => Rule.required().max(30),
     }),
     defineField({
       name: 'logo',
@@ -21,6 +22,8 @@ export default defineType({
           name: 'alt',
           title: '代替テキスト',
           type: 'string',
+          description: '推奨50字以内',
+          validation: (Rule) => Rule.max(50),
         }),
       ],
     }),

@@ -2,9 +2,8 @@
 
 import { motion } from "motion/react";
 import Image from "next/image";
-import { Sparkles, MapPin, Calendar, ArrowRight, TrendingUp } from "lucide-react";
+import { Sparkles, MapPin, Calendar, TrendingUp } from "lucide-react";
 import { Section } from "@/components/layout";
-import { Button } from "@/components/ui";
 import { StaggerContainer, StaggerItem } from "@/components/animation";
 import {
   sectionHeader,
@@ -330,25 +329,6 @@ export function CaseStudy({
         </motion.div>
       )}
 
-      {/* View More Button */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, delay: 0.4 }}
-        className="text-center mt-12 relative z-10"
-      >
-        <Button
-          variant="secondary"
-          size="lg"
-          className="group"
-          rightIcon={
-            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-          }
-        >
-          すべての事例を見る
-        </Button>
-      </motion.div>
     </Section>
   );
 }
