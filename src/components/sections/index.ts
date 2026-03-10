@@ -1,10 +1,14 @@
 export { Hero } from "./Hero";
+export { MicroMeshLED } from "./MicroMeshLED";
 export { Problem } from "./Problem";
 export { Reason } from "./Reason";
+export { ProductLineup } from "./ProductLineup";
 export { CaseStudy } from "./CaseStudy";
 export { Testimonials } from "./Testimonials";
-export { ClientLogos } from "./ClientLogos";
-export { UseCases } from "./UseCases";
+export { BeltSlider } from "./BeltSlider";
 export { Pricing } from "./Pricing";
 export { FAQ } from "./FAQ";
+export { LEDSales } from "./LEDSales";
+export { EventProduction } from "./EventProduction";
+export { ServiceFlow } from "./ServiceFlow";
 export { CTA } from "./CTA";

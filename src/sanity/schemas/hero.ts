@@ -6,11 +6,18 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({
-      name: 'headline',
-      title: 'メインヘッドライン',
+      name: 'headlineOrange',
+      title: 'ヘッドライン（オレンジ部分）',
       type: 'string',
-      description: '推奨50字以内。例: 展示会の成功を、映像演出で確実なものに。',
-      validation: (Rule) => Rule.required().max(50),
+      description: '推奨25字以内。オレンジグラデーションで表示されるテキスト',
+      validation: (Rule) => Rule.required().max(25),
+    }),
+    defineField({
+      name: 'headlineWhite',
+      title: 'ヘッドライン（白テキスト部分）',
+      type: 'string',
+      description: '推奨25字以内。白色で表示されるテキスト',
+      validation: (Rule) => Rule.max(25),
     }),
     defineField({
       name: 'subHeadline',
@@ -111,6 +118,6 @@ export default defineType({
     }),
   ],
   preview: {
-    select: { title: 'headline' },
+    select: { title: 'headlineOrange' },
   },
 })

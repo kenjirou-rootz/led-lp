@@ -43,7 +43,8 @@ export const queries = {
     "logoAlt": logo.alt
   }`,
   hero: `*[_type == "hero"][0]{
-    headline,
+    headlineOrange,
+    headlineWhite,
     subHeadline,
     backgroundType,
     "backgroundImageUrl": backgroundImage.asset->url,
@@ -122,30 +123,51 @@ export const queries = {
     answer,
     order
   }`,
-  clientLogos: `*[_type == "clientLogo"] | order(order asc){
-    _id,
-    companyName,
-    "logoUrl": logo.asset->url,
-    "logoAlt": logo.alt,
-    websiteUrl,
-    order
+  microMeshLed: `*[_type == "microMeshLed"][0]{
+    catchcopy,
+    "mobileImageUrl": mobileImage.asset->url,
+    "mobileImageAlt": mobileImage.alt,
+    "pcImageUrl": pcImage.asset->url,
+    "pcImageAlt": pcImage.alt,
+    sellingPointsTitle,
+    sellingPoints
   }`,
-  useCases: `*[_type == "useCase"] | order(order asc){
-    _id,
-    category,
-    tabLabel,
-    description,
-    recommendedEquipment[]{
-      name,
-      spec,
-      note
-    },
+  productLineup: `*[_type == "productLineup"][0]{
+    sectionTitle,
+    "products": products[]{
+      "thumbnailUrl": thumbnail.asset->url,
+      "thumbnailAlt": thumbnail.alt,
+      subtitle,
+      attributes
+    }
+  }`,
+  beltSlider: `*[_type == "beltSlider"][0]{
+    heading,
     "images": images[]{
       "url": asset->url,
-      alt,
-      caption
-    },
-    order
+      alt
+    }
+  }`,
+  ledSales: `*[_type == "ledSales"][0]{
+    subtitle,
+    "imageUrl": image.asset->url,
+    "imageAlt": image.alt,
+    description
+  }`,
+  eventProduction: `*[_type == "eventProduction"][0]{
+    subtitle,
+    "imageUrl": image.asset->url,
+    "imageAlt": image.alt,
+    description,
+    ctaButtonText,
+    ctaButtonUrl
+  }`,
+  serviceFlow: `*[_type == "serviceFlow"][0]{
+    sectionTitle,
+    steps[]{
+      title,
+      description
+    }
   }`,
   ctaSection: `*[_type == "cta"][0]{
     headline,
@@ -181,7 +203,8 @@ export interface SiteSettings {
 }
 
 export interface HeroData {
-  headline?: string;
+  headlineOrange?: string;
+  headlineWhite?: string;
   subHeadline?: string;
   backgroundType?: 'image' | 'video' | 'youtube';
   backgroundImageUrl?: string;
@@ -271,31 +294,62 @@ export interface FAQData {
   order: number;
 }
 
-export interface ClientLogoData {
-  _id: string;
-  companyName: string;
-  logoUrl?: string;
-  logoAlt?: string;
-  websiteUrl?: string;
-  order: number;
+export interface MicroMeshLedData {
+  catchcopy?: string;
+  mobileImageUrl?: string;
+  mobileImageAlt?: string;
+  pcImageUrl?: string;
+  pcImageAlt?: string;
+  sellingPointsTitle?: string;
+  sellingPoints?: string[];
 }
 
-export interface UseCaseData {
-  _id: string;
-  category: string;
-  tabLabel: string;
-  description?: unknown[]; // Portable Text blocks
-  recommendedEquipment?: Array<{
-    name?: string;
-    spec?: string;
-    note?: string;
-  }>;
-  images?: Array<{
-    url: string;
-    alt?: string;
-    caption?: string;
-  }>;
-  order: number;
+export interface ProductLineupProduct {
+  thumbnailUrl?: string;
+  thumbnailAlt?: string;
+  subtitle: string;
+  attributes?: string;
+}
+
+export interface ProductLineupData {
+  sectionTitle?: string;
+  products?: ProductLineupProduct[];
+}
+
+export interface BeltSliderImage {
+  url: string;
+  alt?: string;
+}
+
+export interface BeltSliderData {
+  heading?: string;
+  images?: BeltSliderImage[];
+}
+
+export interface LEDSalesData {
+  subtitle?: string;
+  imageUrl?: string;
+  imageAlt?: string;
+  description?: string;
+}
+
+export interface EventProductionData {
+  subtitle?: string;
+  imageUrl?: string;
+  imageAlt?: string;
+  description?: string;
+  ctaButtonText?: string;
+  ctaButtonUrl?: string;
+}
+
+export interface ServiceFlowStep {
+  title: string;
+  description?: string;
+}
+
+export interface ServiceFlowData {
+  sectionTitle?: string;
+  steps?: ServiceFlowStep[];
 }
 
 export interface CTASectionData {

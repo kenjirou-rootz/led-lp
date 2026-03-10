@@ -202,7 +202,7 @@ export function CTA({
                       <Zap className="w-5 h-5 text-[var(--accent-cta)]" />
                     </div>
                     <h3 className="font-display text-lg font-bold text-[var(--text-primary)] tracking-wide">
-                      お問い合わせフォーム
+                      LEDに関するお問い合わせフォーム
                     </h3>
                   </div>
 

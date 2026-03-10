@@ -8,6 +8,8 @@ import {
   heroHeadline,
   heroSubheadline,
   heroCTA,
+  heroBadges,
+  heroBadgeItem,
 } from "@/lib/animations";
 
 // Animated Dot Wave Component - Fine dot pattern with multiply blend (Optimized)
@@ -99,8 +101,14 @@ function AnimatedGradientOverlay() {
   );
 }
 
+interface TrustBadge {
+  text?: string;
+  iconUrl?: string;
+}
+
 interface HeroProps {
-  headline?: string;
+  headlineOrange?: string;
+  headlineWhite?: string;
   subheadline?: string;
   backgroundType?: "image" | "video" | "youtube";
   backgroundImageUrl?: string;
@@ -109,7 +117,14 @@ interface HeroProps {
   posterUrl?: string;
   ctaText?: string;
   ctaLink?: string;
+  trustBadges?: TrustBadge[];
 }
+
+const defaultBadges: TrustBadge[] = [
+  { text: "業界NO.1の軽さ" },
+  { text: "リピート率98%超え" },
+  { text: "10年以上の業界実績" },
+];
 
 // YouTube URLからビデオIDを抽出
 function extractYouTubeId(url: string): string | null {
@@ -119,7 +134,8 @@ function extractYouTubeId(url: string): string | null {
 }
 
 export function Hero({
-  headline,
+  headlineOrange,
+  headlineWhite,
   subheadline = "業界15年・累計3,500件の実績。確実に成功へ導く映像のプロ集団",
   backgroundType = "image",
   backgroundImageUrl,
@@ -128,6 +144,7 @@ export function Hero({
   posterUrl = "/images/hero-poster.jpg",
   ctaText = "無料で相談する",
   ctaLink = "cta",
+  trustBadges,
 }: HeroProps) {
   const youtubeId = youtubeUrl ? extractYouTubeId(youtubeUrl) : null;
 
@@ -186,27 +203,24 @@ export function Hero({
 
   // ヘッドラインの表示処理
   const renderHeadline = () => {
-    if (!headline) return null;
+    if (!headlineOrange && !headlineWhite) return null;
 
-    // 「、」で分割して2行表示
-    if (headline.includes("、")) {
-      const headlineParts = headline.split("、");
-      return (
-        <>
-          <span className="text-gradient-orange text-glow-orange">{headlineParts[0]}、</span>
-          <br className="hidden sm:block" />
-          <span className="text-[var(--text-primary)]">
-            {headlineParts.slice(1).join("、")}
-          </span>
-        </>
-      );
-    }
-
-    // 「、」がない場合は1行表示
     return (
-      <span className="text-gradient-orange text-glow-orange">{headline}</span>
+      <>
+        {headlineOrange && (
+          <span className="text-gradient-orange text-glow-orange">{headlineOrange}</span>
+        )}
+        {headlineWhite && (
+          <>
+            <br className="hidden sm:block" />
+            <span className="text-[var(--text-primary)]">{headlineWhite}</span>
+          </>
+        )}
+      </>
     );
   };
+
+  const displayBadges = trustBadges && trustBadges.length > 0 ? trustBadges : defaultBadges;
 
   // CTAボタンのクリックハンドラ
   const handleCtaClick = () => {
@@ -262,7 +276,7 @@ export function Hero({
           </motion.div>
 
           {/* Main Headline - Orange gradient */}
-          {headline && (
+          {(headlineOrange || headlineWhite) && (
             <motion.h1
               variants={heroHeadline}
               initial="hidden"
@@ -302,6 +316,27 @@ export function Hero({
             >
               <span className="relative z-10">{ctaText}</span>
             </Button>
+          </motion.div>
+
+          {/* Trust Badges */}
+          <motion.div
+            variants={heroBadges}
+            initial="hidden"
+            animate="visible"
+            className="mt-8 flex flex-wrap justify-center md:justify-start gap-3"
+          >
+            {displayBadges.map((badge, index) => (
+              <motion.div
+                key={index}
+                variants={heroBadgeItem}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--bg-card)]/60 border border-[var(--border-default)] backdrop-blur-sm"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-primary)]" />
+                <span className="text-sm font-medium text-[var(--text-secondary)]">
+                  {badge.text}
+                </span>
+              </motion.div>
+            ))}
           </motion.div>
         </div>
       </Container>
