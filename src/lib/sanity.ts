@@ -4,7 +4,7 @@ export const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
   apiVersion: "2024-01-01",
-  useCdn: true, // タグベースrevalidationでCDNキャッシュを活用
+  useCdn: false, // Webhook revalidation時の即時反映のためCDNを無効化
 });
 
 export async function sanityFetch<T>({
@@ -52,10 +52,9 @@ export const queries = {
     youtubeUrl,
     ctaText,
     ctaLink,
-    trustBadges[]{
-      text,
-      "iconUrl": icon.asset->url
-    }
+    trustBadge1,
+    trustBadge2,
+    trustBadge3
   }`,
   problemSection: `*[_type == "problem"][0]{
     sectionTitle,
@@ -66,7 +65,10 @@ export const queries = {
       description,
       "backgroundImageUrl": backgroundImage.asset->url,
       "backgroundImageAlt": backgroundImage.alt
-    }
+    },
+    ctaButtonText,
+    ctaButtonType,
+    ctaButtonUrl
   }`,
   reasonSection: `*[_type == "reason"][0]{
     sectionTitle,
@@ -79,20 +81,6 @@ export const queries = {
       "imageAlt": image.alt,
       highlights
     }
-  }`,
-  caseStudies: `*[_type == "caseStudy"] | order(order asc){
-    _id,
-    clientName,
-    industry,
-    eventType,
-    summary,
-    result,
-    "images": images[]{
-      "url": asset->url,
-      alt,
-      caption
-    },
-    order
   }`,
   testimonials: `*[_type == "testimonial"] | order(order asc){
     _id,
@@ -122,6 +110,16 @@ export const queries = {
     question,
     answer,
     order
+  }`,
+  testimonialSection: `*[_type == "testimonialSection"][0]{
+    ctaButtonText,
+    ctaButtonType,
+    ctaButtonUrl
+  }`,
+  faqSection: `*[_type == "faqSection"][0]{
+    ctaButtonText,
+    ctaButtonType,
+    ctaButtonUrl
   }`,
   microMeshLed: `*[_type == "microMeshLed"][0]{
     catchcopy,
@@ -212,10 +210,9 @@ export interface HeroData {
   youtubeUrl?: string;
   ctaText?: string;
   ctaLink?: string;
-  trustBadges?: Array<{
-    text?: string;
-    iconUrl?: string;
-  }>;
+  trustBadge1?: string;
+  trustBadge2?: string;
+  trustBadge3?: string;
 }
 
 export interface ProblemItemData {
@@ -230,6 +227,9 @@ export interface ProblemSectionData {
   sectionSubtitle?: string;
   transitionText?: string;
   items?: ProblemItemData[];
+  ctaButtonText?: string;
+  ctaButtonType?: 'url' | 'scroll';
+  ctaButtonUrl?: string;
 }
 
 export interface ReasonItemData {
@@ -245,21 +245,6 @@ export interface ReasonSectionData {
   sectionTitle?: string;
   sectionSubtitle?: string;
   items?: ReasonItemData[];
-}
-
-export interface CaseStudyData {
-  _id: string;
-  clientName: string;
-  industry?: string;
-  eventType?: string;
-  summary?: string;
-  result?: unknown[]; // Portable Text blocks
-  images?: Array<{
-    url: string;
-    alt?: string;
-    caption?: string;
-  }>;
-  order: number;
 }
 
 export interface TestimonialData {
@@ -292,6 +277,12 @@ export interface FAQData {
   question: string;
   answer: unknown[]; // Portable Text blocks
   order: number;
+}
+
+export interface SectionCtaData {
+  ctaButtonText?: string;
+  ctaButtonType?: 'url' | 'scroll';
+  ctaButtonUrl?: string;
 }
 
 export interface MicroMeshLedData {

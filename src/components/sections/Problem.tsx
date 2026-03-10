@@ -2,8 +2,9 @@
 
 import { motion } from "motion/react";
 import Image from "next/image";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, ArrowRight } from "lucide-react";
 import { Section } from "@/components/layout";
+import { Button } from "@/components/ui";
 import { StaggerContainer, StaggerItem } from "@/components/animation";
 import {
   sectionHeader,
@@ -60,6 +61,9 @@ export function Problem({ problemSectionData }: ProblemProps) {
     "LEDビジョンの導入には、さまざまな不安がつきものです。";
   const transitionText =
     problemSectionData?.transitionText || "そのお悩み、すべて解決できます。";
+  const ctaButtonText = problemSectionData?.ctaButtonText;
+  const ctaButtonType = problemSectionData?.ctaButtonType || "scroll";
+  const ctaButtonUrl = problemSectionData?.ctaButtonUrl;
   const items =
     problemSectionData?.items && problemSectionData.items.length > 0
       ? problemSectionData.items
@@ -191,6 +195,32 @@ export function Problem({ problemSectionData }: ProblemProps) {
             )}
           </p>
         </div>
+
+        {/* CTA Button */}
+        {ctaButtonText && (
+          <div className="mt-10 flex justify-center">
+            {ctaButtonType === "scroll" ? (
+              <Button
+                size="lg"
+                className="group bg-[var(--accent-cta)] hover:bg-[var(--accent-cta-hover)] shadow-[var(--glow-orange)]"
+                rightIcon={<ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />}
+                onClick={() => document.getElementById("cta")?.scrollIntoView({ behavior: "smooth" })}
+              >
+                {ctaButtonText}
+              </Button>
+            ) : (
+              <a href={ctaButtonUrl} target="_blank" rel="noopener noreferrer">
+                <Button
+                  size="lg"
+                  className="group bg-[var(--accent-cta)] hover:bg-[var(--accent-cta-hover)] shadow-[var(--glow-orange)]"
+                  rightIcon={<ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />}
+                >
+                  {ctaButtonText}
+                </Button>
+              </a>
+            )}
+          </div>
+        )}
       </motion.div>
     </Section>
   );

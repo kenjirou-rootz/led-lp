@@ -101,11 +101,6 @@ function AnimatedGradientOverlay() {
   );
 }
 
-interface TrustBadge {
-  text?: string;
-  iconUrl?: string;
-}
-
 interface HeroProps {
   headlineOrange?: string;
   headlineWhite?: string;
@@ -117,14 +112,12 @@ interface HeroProps {
   posterUrl?: string;
   ctaText?: string;
   ctaLink?: string;
-  trustBadges?: TrustBadge[];
+  trustBadge1?: string;
+  trustBadge2?: string;
+  trustBadge3?: string;
 }
 
-const defaultBadges: TrustBadge[] = [
-  { text: "業界NO.1の軽さ" },
-  { text: "リピート率98%超え" },
-  { text: "10年以上の業界実績" },
-];
+const defaultBadges = ["業界NO.1の軽さ", "リピート率98%超え", "10年以上の業界実績"];
 
 // YouTube URLからビデオIDを抽出
 function extractYouTubeId(url: string): string | null {
@@ -144,9 +137,15 @@ export function Hero({
   posterUrl = "/images/hero-poster.jpg",
   ctaText = "無料で相談する",
   ctaLink = "cta",
-  trustBadges,
+  trustBadge1,
+  trustBadge2,
+  trustBadge3,
 }: HeroProps) {
   const youtubeId = youtubeUrl ? extractYouTubeId(youtubeUrl) : null;
+
+  // 信頼バッジ: CMSデータがあればそちらを使用、なければデフォルト
+  const cmsBadges = [trustBadge1, trustBadge2, trustBadge3].filter(Boolean) as string[];
+  const displayBadges = cmsBadges.length > 0 ? cmsBadges : defaultBadges;
 
   // 背景コンテンツをレンダリング
   const renderBackground = () => {
@@ -219,8 +218,6 @@ export function Hero({
       </>
     );
   };
-
-  const displayBadges = trustBadges && trustBadges.length > 0 ? trustBadges : defaultBadges;
 
   // CTAボタンのクリックハンドラ
   const handleCtaClick = () => {
@@ -325,7 +322,7 @@ export function Hero({
             animate="visible"
             className="mt-8 flex flex-wrap justify-center md:justify-start gap-3"
           >
-            {displayBadges.map((badge, index) => (
+            {displayBadges.map((badgeText, index) => (
               <motion.div
                 key={index}
                 variants={heroBadgeItem}
@@ -333,7 +330,7 @@ export function Hero({
               >
                 <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-primary)]" />
                 <span className="text-sm font-medium text-[var(--text-secondary)]">
-                  {badge.text}
+                  {badgeText}
                 </span>
               </motion.div>
             ))}

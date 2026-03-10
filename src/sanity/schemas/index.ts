@@ -4,11 +4,12 @@ import microMeshLed from './microMeshLed'
 import problem from './problem'
 import reason from './reason'
 import productLineup from './productLineup'
-import caseStudy from './caseStudy'
 import testimonial from './testimonial'
+import testimonialSection from './testimonialSection'
 import beltSlider from './beltSlider'
 import pricingPlan from './pricingPlan'
 import faq from './faq'
+import faqSection from './faqSection'
 import ledSales from './ledSales'
 import eventProduction from './eventProduction'
 import serviceFlow from './serviceFlow'
@@ -25,14 +26,15 @@ export const schemaTypes = [
   problem,           // 3. 課題共感セクション
   reason,            // 4. 解決策提示セクション
   productLineup,     // 5. 商品ラインナップ
-  caseStudy,         // 6. 導入事例
-  testimonial,       // 7. 顧客の声
-  beltSlider,        // 8. ベルトスライダー
-  pricingPlan,       // 9. 価格透明性セクション
-  faq,               // 10. FAQセクション
-  ledSales,          // 11. LED販売セールス
-  eventProduction,   // 12. イベント演出事業
-  serviceFlow,       // 13. サービスフロー
-  cta,               // 14. CTAセクション
-  footer,            // 15. フッター設定
+  testimonial,       // 6. 顧客の声
+  testimonialSection, // 6b. お客様の声セクション設定
+  beltSlider,        // 7. ベルトスライダー
+  pricingPlan,       // 8. 価格透明性セクション
+  faq,               // 9. FAQセクション
+  faqSection,        // 9b. FAQセクション設定
+  ledSales,          // 10. LED販売セールス
+  eventProduction,   // 11. イベント演出事業
+  serviceFlow,       // 12. サービスフロー
+  cta,               // 13. CTAセクション
+  footer,            // 14. フッター設定
 ]

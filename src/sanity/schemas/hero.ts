@@ -76,31 +76,25 @@ export default defineType({
       validation: (Rule) => Rule.uri({ scheme: ['http', 'https'] }),
     }),
     defineField({
-      name: 'trustBadges',
-      title: '信頼バッジ',
-      type: 'array',
-      of: [
-        {
-          type: 'object',
-          fields: [
-            defineField({
-              name: 'icon',
-              title: 'アイコン',
-              type: 'image',
-            }),
-            defineField({
-              name: 'text',
-              title: 'バッジテキスト',
-              type: 'string',
-              description: '推奨15字以内。例: 累計3,500件',
-              validation: (Rule) => Rule.max(15),
-            }),
-          ],
-          preview: {
-            select: { title: 'text' },
-          },
-        },
-      ],
+      name: 'trustBadge1',
+      title: '信頼バッジ①',
+      type: 'string',
+      description: '推奨15字以内。例: 業界NO.1の軽さ',
+      validation: (Rule) => Rule.max(15),
+    }),
+    defineField({
+      name: 'trustBadge2',
+      title: '信頼バッジ②',
+      type: 'string',
+      description: '推奨15字以内。例: リピート率98%超え',
+      validation: (Rule) => Rule.max(15),
+    }),
+    defineField({
+      name: 'trustBadge3',
+      title: '信頼バッジ③',
+      type: 'string',
+      description: '推奨15字以内。例: 10年以上の業界実績',
+      validation: (Rule) => Rule.max(15),
     }),
     defineField({
       name: 'ctaText',

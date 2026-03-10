@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { ChevronDown, HelpCircle, MessageCircle } from "lucide-react";
+import { ChevronDown, HelpCircle, MessageCircle, ArrowRight } from "lucide-react";
 import { Section } from "@/components/layout";
+import { Button } from "@/components/ui";
 import { StaggerContainer, StaggerItem } from "@/components/animation";
 import {
   sectionHeader,
@@ -12,7 +13,7 @@ import {
   sectionSubtitle,
   accordionContent,
 } from "@/lib/animations";
-import type { FAQData } from "@/lib/sanity";
+import type { FAQData, SectionCtaData } from "@/lib/sanity";
 
 interface FAQItem {
   id: string;
@@ -87,6 +88,7 @@ interface FAQProps {
   subtitle?: string;
   faqs?: FAQItem[];
   faqsData?: FAQData[];
+  sectionCta?: SectionCtaData | null;
 }
 
 export function FAQ({
@@ -94,6 +96,7 @@ export function FAQ({
   subtitle = "お客様からよくいただくご質問にお答えします。",
   faqs = defaultFAQs,
   faqsData,
+  sectionCta,
 }: FAQProps) {
   // CMSデータがある場合はそちらを使用
   const displayFAQs =
@@ -257,7 +260,7 @@ export function FAQ({
         })}
       </StaggerContainer>
 
-      {/* More Questions */}
+      {/* CTA Button / More Questions */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -265,19 +268,44 @@ export function FAQ({
         transition={{ duration: 0.6, delay: 0.4 }}
         className="text-center mt-12 relative z-10"
       >
-        <div className="inline-flex items-center gap-3 px-6 py-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border-default)]">
-          <MessageCircle className="w-5 h-5 text-[var(--accent-primary)]" />
-          <p className="text-sm text-[var(--text-muted)]">
-            その他のご質問は
-            <a
-              href="#cta"
-              className="text-[var(--accent-primary)] hover:text-[var(--accent-primary-hover)] font-medium ml-1 transition-colors"
-            >
-              お問い合わせ
-            </a>
-            からお気軽にどうぞ。
-          </p>
-        </div>
+        {sectionCta?.ctaButtonText ? (
+          <div className="flex justify-center">
+            {sectionCta.ctaButtonType === "scroll" ? (
+              <Button
+                size="lg"
+                className="group bg-[var(--accent-cta)] hover:bg-[var(--accent-cta-hover)] shadow-[var(--glow-orange)]"
+                rightIcon={<ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />}
+                onClick={() => document.getElementById("cta")?.scrollIntoView({ behavior: "smooth" })}
+              >
+                {sectionCta.ctaButtonText}
+              </Button>
+            ) : (
+              <a href={sectionCta.ctaButtonUrl} target="_blank" rel="noopener noreferrer">
+                <Button
+                  size="lg"
+                  className="group bg-[var(--accent-cta)] hover:bg-[var(--accent-cta-hover)] shadow-[var(--glow-orange)]"
+                  rightIcon={<ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />}
+                >
+                  {sectionCta.ctaButtonText}
+                </Button>
+              </a>
+            )}
+          </div>
+        ) : (
+          <div className="inline-flex items-center gap-3 px-6 py-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border-default)]">
+            <MessageCircle className="w-5 h-5 text-[var(--accent-primary)]" />
+            <p className="text-sm text-[var(--text-muted)]">
+              その他のご質問は
+              <a
+                href="#cta"
+                className="text-[var(--accent-primary)] hover:text-[var(--accent-primary-hover)] font-medium ml-1 transition-colors"
+              >
+                お問い合わせ
+              </a>
+              からお気軽にどうぞ。
+            </p>
+          </div>
+        )}
       </motion.div>
     </Section>
   );

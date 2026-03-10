@@ -3,7 +3,6 @@ export { MicroMeshLED } from "./MicroMeshLED";
 export { Problem } from "./Problem";
 export { Reason } from "./Reason";
 export { ProductLineup } from "./ProductLineup";
-export { CaseStudy } from "./CaseStudy";
 export { Testimonials } from "./Testimonials";
 export { BeltSlider } from "./BeltSlider";
 export { Pricing } from "./Pricing";

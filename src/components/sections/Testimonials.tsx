@@ -1,8 +1,9 @@
 "use client";
 
 import { motion } from "motion/react";
-import { Quote, Star, MessageSquare } from "lucide-react";
+import { Quote, Star, MessageSquare, ArrowRight } from "lucide-react";
 import { Section } from "@/components/layout";
+import { Button } from "@/components/ui";
 import { StaggerContainer, StaggerItem } from "@/components/animation";
 import {
   sectionHeader,
@@ -10,7 +11,7 @@ import {
   sectionTitle,
   sectionSubtitle,
 } from "@/lib/animations";
-import type { TestimonialData } from "@/lib/sanity";
+import type { TestimonialData, SectionCtaData } from "@/lib/sanity";
 
 interface TestimonialItem {
   id: string;
@@ -56,6 +57,7 @@ interface TestimonialsProps {
   subtitle?: string;
   testimonials?: TestimonialItem[];
   testimonialsData?: TestimonialData[];
+  sectionCta?: SectionCtaData | null;
 }
 
 export function Testimonials({
@@ -63,6 +65,7 @@ export function Testimonials({
   subtitle = "実際にご利用いただいたお客様からの声をご紹介します。",
   testimonials = defaultTestimonials,
   testimonialsData,
+  sectionCta,
 }: TestimonialsProps) {
   // CMSデータがある場合はそちらを使用
   const displayTestimonials =
@@ -195,6 +198,38 @@ export function Testimonials({
           </StaggerItem>
         ))}
       </StaggerContainer>
+
+      {/* CTA Button */}
+      {sectionCta?.ctaButtonText && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="mt-12 flex justify-center relative z-10"
+        >
+          {sectionCta.ctaButtonType === "scroll" ? (
+            <Button
+              size="lg"
+              className="group bg-[var(--accent-cta)] hover:bg-[var(--accent-cta-hover)] shadow-[var(--glow-orange)]"
+              rightIcon={<ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />}
+              onClick={() => document.getElementById("cta")?.scrollIntoView({ behavior: "smooth" })}
+            >
+              {sectionCta.ctaButtonText}
+            </Button>
+          ) : (
+            <a href={sectionCta.ctaButtonUrl} target="_blank" rel="noopener noreferrer">
+              <Button
+                size="lg"
+                className="group bg-[var(--accent-cta)] hover:bg-[var(--accent-cta-hover)] shadow-[var(--glow-orange)]"
+                rightIcon={<ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />}
+              >
+                {sectionCta.ctaButtonText}
+              </Button>
+            </a>
+          )}
+        </motion.div>
+      )}
 
       {/* Decorative Bottom Line */}
       <div className="mt-16 h-[1px] bg-gradient-to-r from-transparent via-[var(--accent-primary)]/30 to-transparent relative z-10" />

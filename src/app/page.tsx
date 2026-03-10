@@ -5,7 +5,6 @@ import {
   Problem,
   Reason,
   ProductLineup,
-  CaseStudy,
   Testimonials,
   BeltSlider,
   Pricing,
@@ -24,11 +23,11 @@ import {
   type ProblemSectionData,
   type ReasonSectionData,
   type ProductLineupData,
-  type CaseStudyData,
   type TestimonialData,
   type BeltSliderData,
   type PricingPlanData,
   type FAQData,
+  type SectionCtaData,
   type LEDSalesData,
   type EventProductionData,
   type ServiceFlowData,
@@ -45,11 +44,12 @@ export default async function Home() {
     problemsData,
     reasonsData,
     productLineupData,
-    caseStudiesData,
     testimonialsData,
+    testimonialSectionData,
     beltSliderData,
     pricingPlansData,
     faqsData,
+    faqSectionData,
     ledSalesData,
     eventProductionData,
     serviceFlowData,
@@ -80,13 +80,13 @@ export default async function Home() {
       query: queries.productLineup,
       tags: ["productLineup"],
     }),
-    sanityFetch<CaseStudyData[]>({
-      query: queries.caseStudies,
-      tags: ["caseStudy"],
-    }),
     sanityFetch<TestimonialData[]>({
       query: queries.testimonials,
       tags: ["testimonial"],
+    }),
+    sanityFetch<SectionCtaData>({
+      query: queries.testimonialSection,
+      tags: ["testimonialSection"],
     }),
     sanityFetch<BeltSliderData>({
       query: queries.beltSlider,
@@ -99,6 +99,10 @@ export default async function Home() {
     sanityFetch<FAQData[]>({
       query: queries.faqs,
       tags: ["faq"],
+    }),
+    sanityFetch<SectionCtaData>({
+      query: queries.faqSection,
+      tags: ["faqSection"],
     }),
     sanityFetch<LEDSalesData>({
       query: queries.ledSales,
@@ -137,7 +141,9 @@ export default async function Home() {
           youtubeUrl={heroData?.youtubeUrl}
           ctaText={heroData?.ctaText}
           ctaLink={heroData?.ctaLink}
-          trustBadges={heroData?.trustBadges}
+          trustBadge1={heroData?.trustBadge1}
+          trustBadge2={heroData?.trustBadge2}
+          trustBadge3={heroData?.trustBadge3}
         />
         {/* 2. マイクロメッシュLED */}
         <MicroMeshLED data={microMeshLedData} />
@@ -147,25 +153,23 @@ export default async function Home() {
         <Reason reasonSectionData={reasonsData} />
         {/* 5. 商品ラインナップ */}
         <ProductLineup data={productLineupData} />
-        {/* 6. 導入事例 */}
-        <CaseStudy caseStudiesData={caseStudiesData} />
-        {/* 7. お客様の声 */}
-        <Testimonials testimonialsData={testimonialsData} />
-        {/* 8. ベルトスライダー #1 */}
+        {/* 6. お客様の声 */}
+        <Testimonials testimonialsData={testimonialsData} sectionCta={testimonialSectionData} />
+        {/* 7. ベルトスライダー #1 */}
         <BeltSlider id="belt-slider-1" data={beltSliderData} />
-        {/* 9. 料金プラン */}
+        {/* 8. 料金プラン */}
         <Pricing pricingPlansData={pricingPlansData} />
-        {/* 10. FAQ */}
-        <FAQ faqsData={faqsData} />
-        {/* 11. ベルトスライダー #2 */}
+        {/* 9. FAQ */}
+        <FAQ faqsData={faqsData} sectionCta={faqSectionData} />
+        {/* 10. ベルトスライダー #2 */}
         <BeltSlider id="belt-slider-2" data={beltSliderData} />
-        {/* 12. LED販売 */}
+        {/* 11. LED販売 */}
         <LEDSales data={ledSalesData} />
-        {/* 13. イベント演出 */}
+        {/* 12. イベント演出 */}
         <EventProduction data={eventProductionData} />
-        {/* 14. サービスフロー */}
+        {/* 13. サービスフロー */}
         <ServiceFlow data={serviceFlowData} />
-        {/* 15. お問い合わせ */}
+        {/* 14. お問い合わせ */}
         <CTA siteSettings={siteSettings} ctaData={ctaData} />
       </main>
       <Footer siteSettings={siteSettings} footerData={footerData} />
