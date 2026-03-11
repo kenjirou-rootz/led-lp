@@ -27,11 +27,11 @@ export const schemaTypes = [
   reason,            // 4. 解決策提示セクション
   productLineup,     // 5. 商品ラインナップ
   testimonial,       // 6. 顧客の声
-  testimonialSection, // 6b. お客様の声セクション設定
+  testimonialSection, // 6b. 顧客の声CTRボタン
   beltSlider,        // 7. ベルトスライダー
   pricingPlan,       // 8. 価格透明性セクション
   faq,               // 9. FAQセクション
-  faqSection,        // 9b. FAQセクション設定
+  faqSection,        // 9b. FAQ-CTRボタン
   ledSales,          // 10. LED販売セールス
   eventProduction,   // 11. イベント演出事業
   serviceFlow,       // 12. サービスフロー

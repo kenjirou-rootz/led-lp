@@ -2,7 +2,7 @@ import { defineType, defineField } from 'sanity'
 
 export default defineType({
   name: 'testimonialSection',
-  title: 'お客様の声セクション設定',
+  title: '顧客の声CTRボタン',
   type: 'document',
   fields: [
     defineField({
@@ -38,8 +38,8 @@ export default defineType({
   preview: {
     prepare() {
       return {
-        title: 'お客様の声セクション設定',
-        subtitle: 'Testimonials Section Settings',
+        title: '顧客の声CTRボタン',
+        subtitle: 'Testimonials CTA Button',
       }
     },
   },
