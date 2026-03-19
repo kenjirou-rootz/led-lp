@@ -150,8 +150,7 @@ export function FAQ({
 
         {/* Title */}
         <motion.h2 variants={sectionTitle} className="section-title">
-          <span className="text-gradient">{title.slice(0, 4)}</span>
-          <span>{title.slice(4)}</span>
+          {title}
         </motion.h2>
 
         {/* Subtitle */}

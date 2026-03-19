@@ -47,8 +47,7 @@ export function ProductLineup({ data }: ProductLineupProps) {
           </motion.div>
 
           <motion.h2 variants={sectionTitle} className="section-title">
-            <span className="text-gradient">{sectionTitleText.slice(0, 2)}</span>
-            <span>{sectionTitleText.slice(2)}</span>
+            {sectionTitleText}
           </motion.h2>
         </motion.div>
 
@@ -58,9 +57,9 @@ export function ProductLineup({ data }: ProductLineupProps) {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.1 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
         >
-          {products.map((product, index) => (
+          {products.slice(0, 4).map((product, index) => (
             <motion.div
               key={index}
               variants={staggerItem}

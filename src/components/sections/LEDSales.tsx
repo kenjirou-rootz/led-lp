@@ -2,8 +2,9 @@
 
 import { motion } from "motion/react";
 import Image from "next/image";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, ArrowRight } from "lucide-react";
 import { Section } from "@/components/layout";
+import { Button } from "@/components/ui";
 import {
   sectionHeader,
   sectionOverline,
@@ -20,6 +21,8 @@ interface LEDSalesProps {
 export function LEDSales({ data }: LEDSalesProps) {
   const subtitle = data?.subtitle || "LED販売サービス";
   const description = data?.description || "";
+  const ctaButtonText = data?.ctaButtonText || "詳しく見る";
+  const ctaButtonUrl = data?.ctaButtonUrl;
 
   return (
     <Section variant="default" className="relative overflow-hidden">
@@ -45,8 +48,7 @@ export function LEDSales({ data }: LEDSalesProps) {
           </motion.div>
 
           <motion.h2 variants={sectionTitle} className="section-title">
-            <span className="text-gradient-orange">{subtitle.slice(0, 4)}</span>
-            <span>{subtitle.slice(4)}</span>
+            {subtitle}
           </motion.h2>
         </motion.div>
 
@@ -74,7 +76,7 @@ export function LEDSales({ data }: LEDSalesProps) {
             )}
           </motion.div>
 
-          {/* Text */}
+          {/* Text + CTA */}
           <motion.div
             variants={sectionSubtitle}
             initial="hidden"
@@ -82,9 +84,23 @@ export function LEDSales({ data }: LEDSalesProps) {
             viewport={{ once: true }}
           >
             {description && (
-              <p className="text-[var(--text-secondary)] leading-relaxed whitespace-pre-wrap">
+              <p className="text-[var(--text-secondary)] leading-relaxed whitespace-pre-wrap mb-8">
                 {description}
               </p>
+            )}
+
+            {ctaButtonUrl && (
+              <Button
+                variant="primary"
+                size="lg"
+                className="group bg-[var(--accent-cta)] hover:bg-[var(--accent-cta-hover)] shadow-[var(--glow-orange)]"
+                rightIcon={
+                  <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                }
+                onClick={() => window.open(ctaButtonUrl, "_blank", "noopener,noreferrer")}
+              >
+                {ctaButtonText}
+              </Button>
             )}
           </motion.div>
         </div>

@@ -206,23 +206,23 @@ export function Hero({
 
     return (
       <>
-        {headlineOrange && (
-          <span className="text-gradient-orange text-glow-orange">{headlineOrange}</span>
+        {headlineOrange && headlineOrange}
+        {headlineOrange && headlineWhite && (
+          <br className="hidden sm:block" />
         )}
-        {headlineWhite && (
-          <>
-            <br className="hidden sm:block" />
-            <span className="text-[var(--text-primary)]">{headlineWhite}</span>
-          </>
-        )}
+        {headlineWhite && headlineWhite}
       </>
     );
   };
 
   // CTAボタンのクリックハンドラ
   const handleCtaClick = () => {
-    const targetId = ctaLink.replace("#", "");
-    document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth" });
+    if (ctaLink.startsWith("#")) {
+      const targetId = ctaLink.replace("#", "");
+      document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth" });
+    } else {
+      window.open(ctaLink, "_blank", "noopener,noreferrer");
+    }
   };
 
   return (

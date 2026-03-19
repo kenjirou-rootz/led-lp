@@ -12,21 +12,10 @@ interface FooterProps {
 
 const defaultLinkCategories = [
   {
-    title: "サービス",
-    links: [
-      { label: "LEDビジョンレンタル", href: "#" },
-      { label: "設置・撤去サービス", href: "#" },
-      { label: "映像制作", href: "#" },
-      { label: "技術サポート", href: "#" },
-    ],
-  },
-  {
     title: "会社情報",
     links: [
       { label: "会社概要", href: "#" },
-      { label: "導入事例", href: "#case-study" },
       { label: "お客様の声", href: "#testimonials" },
-      { label: "採用情報", href: "#" },
     ],
   },
   {

@@ -10,8 +10,6 @@ import type { SiteSettings } from "@/lib/sanity";
 
 const navLinks = [
   { label: "選ばれる理由", href: "#reason" },
-  { label: "導入事例", href: "#case-study" },
-  { label: "用途別提案", href: "#use-cases" },
   { label: "料金", href: "#pricing" },
   { label: "FAQ", href: "#faq" },
 ];
@@ -151,6 +149,7 @@ export function Header({ siteSettings }: HeaderProps) {
               <Button
                 size="sm"
                 className="relative overflow-hidden bg-gradient-to-r from-[--accent-cta] to-[--accent-cta-hover] hover:shadow-[var(--glow-orange)] transition-shadow duration-300 font-display tracking-wide"
+                onClick={() => document.getElementById("cta")?.scrollIntoView({ behavior: "smooth" })}
               >
                 <span className="relative z-10">無料相談</span>
               </Button>
@@ -234,7 +233,15 @@ export function Header({ siteSettings }: HeaderProps) {
                   transition={{ delay: 0.3 }}
                   className="pt-4 mt-4 border-t border-[--border-default]"
                 >
-                  <Button className="w-full bg-gradient-to-r from-[--accent-cta] to-[--accent-cta-hover] hover:shadow-[var(--glow-orange)] transition-shadow duration-300 font-display tracking-wide">
+                  <Button
+                    className="w-full bg-gradient-to-r from-[--accent-cta] to-[--accent-cta-hover] hover:shadow-[var(--glow-orange)] transition-shadow duration-300 font-display tracking-wide"
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      setTimeout(() => {
+                        document.getElementById("cta")?.scrollIntoView({ behavior: "smooth" });
+                      }, 300);
+                    }}
+                  >
                     無料相談
                   </Button>
                 </motion.div>

@@ -150,7 +150,9 @@ export const queries = {
     subtitle,
     "imageUrl": image.asset->url,
     "imageAlt": image.alt,
-    description
+    description,
+    ctaButtonText,
+    ctaButtonUrl
   }`,
   eventProduction: `*[_type == "eventProduction"][0]{
     subtitle,
@@ -162,6 +164,7 @@ export const queries = {
   }`,
   serviceFlow: `*[_type == "serviceFlow"][0]{
     sectionTitle,
+    sectionSubtitle,
     steps[]{
       title,
       description
@@ -185,6 +188,10 @@ export const queries = {
     address,
     email,
     copyright
+  }`,
+  pricingSection: `*[_type == "pricingSection"][0]{
+    sectionTitle,
+    sectionSubtitle
   }`,
 };
 
@@ -322,6 +329,8 @@ export interface LEDSalesData {
   imageUrl?: string;
   imageAlt?: string;
   description?: string;
+  ctaButtonText?: string;
+  ctaButtonUrl?: string;
 }
 
 export interface EventProductionData {
@@ -340,6 +349,7 @@ export interface ServiceFlowStep {
 
 export interface ServiceFlowData {
   sectionTitle?: string;
+  sectionSubtitle?: string;
   steps?: ServiceFlowStep[];
 }
 
@@ -356,6 +366,11 @@ export interface CTASectionData {
     email?: string;
   };
   backgroundImageUrl?: string;
+}
+
+export interface PricingSectionData {
+  sectionTitle?: string;
+  sectionSubtitle?: string;
 }
 
 export interface FooterLinkItem {

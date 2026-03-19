@@ -1,17 +1,16 @@
 "use client";
 
 import { motion } from "motion/react";
-import { Check, CreditCard, ArrowRight, Sparkles, Zap } from "lucide-react";
+import { Check, CreditCard, Sparkles, Zap } from "lucide-react";
 import Image from "next/image";
 import { Section } from "@/components/layout";
-import { Button } from "@/components/ui";
 import {
   sectionHeader,
   sectionOverline,
   sectionTitle,
   sectionSubtitle,
 } from "@/lib/animations";
-import type { PricingPlanData } from "@/lib/sanity";
+import type { PricingPlanData, PricingSectionData } from "@/lib/sanity";
 
 interface PricingPlan {
   id: string;
@@ -21,7 +20,6 @@ interface PricingPlan {
   priceNote: string;
   features: string[];
   isPopular?: boolean;
-  ctaText: string;
   imageUrl?: string;
   imageAlt?: string;
 }
@@ -40,7 +38,6 @@ const defaultPlans: PricingPlan[] = [
       "電話サポート",
       "機材保険付き",
     ],
-    ctaText: "お見積り",
   },
   {
     id: "standard",
@@ -57,7 +54,6 @@ const defaultPlans: PricingPlan[] = [
       "機材保険付き",
     ],
     isPopular: true,
-    ctaText: "お見積り",
   },
   {
     id: "premium",
@@ -74,23 +70,22 @@ const defaultPlans: PricingPlan[] = [
       "映像制作相談可",
       "機材保険付き",
     ],
-    ctaText: "お見積り",
   },
 ];
 
 interface PricingProps {
-  title?: string;
-  subtitle?: string;
   plans?: PricingPlan[];
   pricingPlansData?: PricingPlanData[];
+  pricingSectionData?: PricingSectionData;
 }
 
 export function Pricing({
-  title = "料金プラン",
-  subtitle = "用途と規模に合わせた、明瞭な料金体系をご用意しています。",
   plans = defaultPlans,
   pricingPlansData,
+  pricingSectionData,
 }: PricingProps) {
+  const title = pricingSectionData?.sectionTitle || "料金プラン";
+  const subtitle = pricingSectionData?.sectionSubtitle || "用途と規模に合わせた、明瞭な料金体系をご用意しています。";
   // CMSデータがある場合はそちらを使用
   const displayPlans =
     pricingPlansData && pricingPlansData.length > 0
@@ -102,7 +97,6 @@ export function Pricing({
           priceNote: p.priceNote || "",
           features: p.features || [],
           isPopular: p.isPopular || false,
-          ctaText: "お見積り",
           imageUrl: p.imageUrl,
           imageAlt: p.imageAlt,
         }))
@@ -141,8 +135,7 @@ export function Pricing({
 
         {/* Title */}
         <motion.h2 variants={sectionTitle} className="section-title">
-          <span className="text-gradient-orange">{title.slice(0, 2)}</span>
-          <span>{title.slice(2)}</span>
+          {title}
         </motion.h2>
 
         {/* Subtitle */}
@@ -297,24 +290,6 @@ export function Pricing({
                   ))}
                 </ul>
 
-                {/* CTA */}
-                <div className="mt-6 pt-6 border-t border-[var(--border-default)]">
-                  <Button
-                    variant={plan.isPopular ? "primary" : "secondary"}
-                    className={`
-                      w-full group relative overflow-hidden
-                      ${plan.isPopular
-                        ? "bg-[var(--accent-cta)] hover:bg-[var(--accent-cta-hover)] shadow-[0_4px_20px_rgba(255,107,0,0.3)] hover:shadow-[0_6px_30px_rgba(255,107,0,0.5)]"
-                        : "hover:border-[var(--accent-primary)] hover:shadow-[0_4px_20px_rgba(0,240,255,0.15)]"
-                      }
-                    `}
-                    rightIcon={
-                      <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                    }
-                  >
-                    {plan.ctaText}
-                  </Button>
-                </div>
               </div>
 
               {/* Hover glow effect */}

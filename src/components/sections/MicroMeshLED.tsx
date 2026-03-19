@@ -51,8 +51,7 @@ export function MicroMeshLED({ data }: MicroMeshLEDProps) {
           </motion.div>
 
           <motion.h2 variants={sectionTitle} className="section-title">
-            <span className="text-gradient">{catchcopy.slice(0, 4)}</span>
-            <span>{catchcopy.slice(4)}</span>
+            {catchcopy}
           </motion.h2>
         </motion.div>
 

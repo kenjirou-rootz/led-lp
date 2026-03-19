@@ -125,8 +125,7 @@ export function Reason({ reasonSectionData }: ReasonProps) {
 
         {/* Title */}
         <motion.h2 variants={sectionTitle} className="section-title">
-          <span className="text-gradient">{sectionTitleText.slice(0, 4)}</span>
-          <span>{sectionTitleText.slice(4)}</span>
+          {sectionTitleText}
         </motion.h2>
 
         {/* Subtitle */}
@@ -225,7 +224,7 @@ export function Reason({ reasonSectionData }: ReasonProps) {
                     <h3 className="font-display text-xl md:text-2xl font-bold text-[var(--text-primary)] mb-3 leading-tight tracking-wide line-clamp-2">
                       {item.title}
                     </h3>
-                    <p className="text-sm md:text-base text-[var(--text-secondary)] mb-5 line-clamp-3 leading-relaxed">
+                    <p className="text-sm md:text-base text-[var(--text-secondary)] mb-5 leading-relaxed">
                       {item.description}
                     </p>
 

@@ -33,6 +33,7 @@ import {
   type ServiceFlowData,
   type CTASectionData,
   type FooterData,
+  type PricingSectionData,
 } from "@/lib/sanity";
 
 export default async function Home() {
@@ -48,6 +49,7 @@ export default async function Home() {
     testimonialSectionData,
     beltSliderData,
     pricingPlansData,
+    pricingSectionData,
     faqsData,
     faqSectionData,
     ledSalesData,
@@ -95,6 +97,10 @@ export default async function Home() {
     sanityFetch<PricingPlanData[]>({
       query: queries.pricingPlans,
       tags: ["pricingPlan"],
+    }),
+    sanityFetch<PricingSectionData>({
+      query: queries.pricingSection,
+      tags: ["pricingSection"],
     }),
     sanityFetch<FAQData[]>({
       query: queries.faqs,
@@ -158,7 +164,7 @@ export default async function Home() {
         {/* 7. ベルトスライダー #1 */}
         <BeltSlider id="belt-slider-1" data={beltSliderData} />
         {/* 8. 料金プラン */}
-        <Pricing pricingPlansData={pricingPlansData} />
+        <Pricing pricingPlansData={pricingPlansData} pricingSectionData={pricingSectionData} />
         {/* 9. FAQ */}
         <FAQ faqsData={faqsData} sectionCta={faqSectionData} />
         {/* 10. ベルトスライダー #2 */}

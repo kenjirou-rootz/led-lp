@@ -13,6 +13,13 @@ export default defineType({
       validation: (Rule) => Rule.max(30),
     }),
     defineField({
+      name: "sectionSubtitle",
+      title: "セクションサブタイトル",
+      type: "string",
+      description: "推奨100字以内。タイトル直下に表示",
+      validation: (Rule) => Rule.max(100),
+    }),
+    defineField({
       name: 'steps',
       title: 'ステップ',
       type: 'array',

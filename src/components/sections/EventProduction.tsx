@@ -48,8 +48,7 @@ export function EventProduction({ data }: EventProductionProps) {
           </motion.div>
 
           <motion.h2 variants={sectionTitle} className="section-title">
-            <span className="text-gradient-orange">{subtitle.slice(0, 4)}</span>
-            <span>{subtitle.slice(4)}</span>
+            {subtitle}
           </motion.h2>
         </motion.div>
 
