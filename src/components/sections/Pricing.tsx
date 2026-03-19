@@ -11,7 +11,7 @@ import {
   sectionTitle,
   sectionSubtitle,
 } from "@/lib/animations";
-import type { PricingPlanData } from "@/lib/sanity";
+import type { PricingPlanData, PricingSectionData } from "@/lib/sanity";
 
 interface PricingPlan {
   id: string;
@@ -79,18 +79,18 @@ const defaultPlans: PricingPlan[] = [
 ];
 
 interface PricingProps {
-  title?: string;
-  subtitle?: string;
   plans?: PricingPlan[];
   pricingPlansData?: PricingPlanData[];
+  pricingSectionData?: PricingSectionData;
 }
 
 export function Pricing({
-  title = "料金プラン",
-  subtitle = "用途と規模に合わせた、明瞭な料金体系をご用意しています。",
   plans = defaultPlans,
   pricingPlansData,
+  pricingSectionData,
 }: PricingProps) {
+  const title = pricingSectionData?.sectionTitle || "料金プラン";
+  const subtitle = pricingSectionData?.sectionSubtitle || "用途と規模に合わせた、明瞭な料金体系をご用意しています。";
   // CMSデータがある場合はそちらを使用
   const displayPlans =
     pricingPlansData && pricingPlansData.length > 0

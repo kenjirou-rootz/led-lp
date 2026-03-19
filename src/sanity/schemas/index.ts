@@ -8,6 +8,7 @@ import testimonial from './testimonial'
 import testimonialSection from './testimonialSection'
 import beltSlider from './beltSlider'
 import pricingPlan from './pricingPlan'
+import { pricingSection } from './pricingSection'
 import faq from './faq'
 import faqSection from './faqSection'
 import ledSales from './ledSales'
@@ -30,6 +31,7 @@ export const schemaTypes = [
   testimonialSection, // 6b. 顧客の声CTRボタン
   beltSlider,        // 7. ベルトスライダー
   pricingPlan,       // 8. 価格透明性セクション
+  pricingSection,    // 8b. 料金プランセクション設定
   faq,               // 9. FAQセクション
   faqSection,        // 9b. FAQ-CTRボタン
   ledSales,          // 10. LED販売セールス

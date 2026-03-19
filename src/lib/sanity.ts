@@ -186,6 +186,10 @@ export const queries = {
     email,
     copyright
   }`,
+  pricingSection: `*[_type == "pricingSection"][0]{
+    sectionTitle,
+    sectionSubtitle
+  }`,
 };
 
 // 型定義
@@ -356,6 +360,11 @@ export interface CTASectionData {
     email?: string;
   };
   backgroundImageUrl?: string;
+}
+
+export interface PricingSectionData {
+  sectionTitle?: string;
+  sectionSubtitle?: string;
 }
 
 export interface FooterLinkItem {
