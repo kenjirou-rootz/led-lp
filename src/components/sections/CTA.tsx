@@ -165,8 +165,7 @@ export function CTA({
 
           {/* Title */}
           <motion.h2 variants={sectionTitle} className="section-title">
-            <span className="text-gradient-orange">{displayHeadline.slice(0, 4)}</span>
-            <span>{displayHeadline.slice(4)}</span>
+            {displayHeadline}
           </motion.h2>
 
           {/* Subtitle */}

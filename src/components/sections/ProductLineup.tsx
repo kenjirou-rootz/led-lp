@@ -47,8 +47,7 @@ export function ProductLineup({ data }: ProductLineupProps) {
           </motion.div>
 
           <motion.h2 variants={sectionTitle} className="section-title">
-            <span className="text-gradient">{sectionTitleText.slice(0, 2)}</span>
-            <span>{sectionTitleText.slice(2)}</span>
+            {sectionTitleText}
           </motion.h2>
         </motion.div>
 
