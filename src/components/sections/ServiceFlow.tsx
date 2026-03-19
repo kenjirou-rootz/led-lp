@@ -7,6 +7,7 @@ import {
   sectionHeader,
   sectionOverline,
   sectionTitle,
+  sectionSubtitle,
   staggerContainer,
   staggerItem,
 } from "@/lib/animations";
@@ -48,6 +49,15 @@ export function ServiceFlow({ data }: ServiceFlowProps) {
           <motion.h2 variants={sectionTitle} className="section-title">
             {sectionTitleText}
           </motion.h2>
+
+          {data?.sectionSubtitle && (
+            <motion.p
+              variants={sectionSubtitle}
+              className="text-[var(--text-secondary)] text-base md:text-lg max-w-2xl mx-auto mt-4"
+            >
+              {data.sectionSubtitle}
+            </motion.p>
+          )}
         </motion.div>
 
         {/* Steps */}

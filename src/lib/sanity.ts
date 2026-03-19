@@ -162,6 +162,7 @@ export const queries = {
   }`,
   serviceFlow: `*[_type == "serviceFlow"][0]{
     sectionTitle,
+    sectionSubtitle,
     steps[]{
       title,
       description
@@ -344,6 +345,7 @@ export interface ServiceFlowStep {
 
 export interface ServiceFlowData {
   sectionTitle?: string;
+  sectionSubtitle?: string;
   steps?: ServiceFlowStep[];
 }
 
