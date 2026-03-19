@@ -35,6 +35,20 @@ export default defineType({
       description: '推奨500字以内',
       validation: (Rule) => Rule.max(500),
     }),
+    defineField({
+      name: 'ctaButtonText',
+      title: 'CTAボタンテキスト',
+      type: 'string',
+      description: '推奨20字以内',
+      validation: (Rule) => Rule.max(20),
+    }),
+    defineField({
+      name: 'ctaButtonUrl',
+      title: 'CTAボタンリンク先',
+      type: 'url',
+      validation: (Rule) =>
+        Rule.uri({ allowRelative: true, scheme: ['http', 'https'] }),
+    }),
   ],
   preview: {
     select: { title: 'subtitle' },

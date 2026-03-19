@@ -150,7 +150,9 @@ export const queries = {
     subtitle,
     "imageUrl": image.asset->url,
     "imageAlt": image.alt,
-    description
+    description,
+    ctaButtonText,
+    ctaButtonUrl
   }`,
   eventProduction: `*[_type == "eventProduction"][0]{
     subtitle,
@@ -327,6 +329,8 @@ export interface LEDSalesData {
   imageUrl?: string;
   imageAlt?: string;
   description?: string;
+  ctaButtonText?: string;
+  ctaButtonUrl?: string;
 }
 
 export interface EventProductionData {
