@@ -217,8 +217,12 @@ export function Hero({
 
   // CTAボタンのクリックハンドラ
   const handleCtaClick = () => {
-    const targetId = ctaLink.replace("#", "");
-    document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth" });
+    if (ctaLink.startsWith("#")) {
+      const targetId = ctaLink.replace("#", "");
+      document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth" });
+    } else {
+      window.open(ctaLink, "_blank", "noopener,noreferrer");
+    }
   };
 
   return (
