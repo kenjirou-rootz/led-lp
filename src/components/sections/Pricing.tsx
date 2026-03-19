@@ -1,10 +1,9 @@
 "use client";
 
 import { motion } from "motion/react";
-import { Check, CreditCard, ArrowRight, Sparkles, Zap } from "lucide-react";
+import { Check, CreditCard, Sparkles, Zap } from "lucide-react";
 import Image from "next/image";
 import { Section } from "@/components/layout";
-import { Button } from "@/components/ui";
 import {
   sectionHeader,
   sectionOverline,
@@ -21,7 +20,6 @@ interface PricingPlan {
   priceNote: string;
   features: string[];
   isPopular?: boolean;
-  ctaText: string;
   imageUrl?: string;
   imageAlt?: string;
 }
@@ -40,7 +38,6 @@ const defaultPlans: PricingPlan[] = [
       "電話サポート",
       "機材保険付き",
     ],
-    ctaText: "お見積り",
   },
   {
     id: "standard",
@@ -57,7 +54,6 @@ const defaultPlans: PricingPlan[] = [
       "機材保険付き",
     ],
     isPopular: true,
-    ctaText: "お見積り",
   },
   {
     id: "premium",
@@ -74,7 +70,6 @@ const defaultPlans: PricingPlan[] = [
       "映像制作相談可",
       "機材保険付き",
     ],
-    ctaText: "お見積り",
   },
 ];
 
@@ -102,7 +97,6 @@ export function Pricing({
           priceNote: p.priceNote || "",
           features: p.features || [],
           isPopular: p.isPopular || false,
-          ctaText: "お見積り",
           imageUrl: p.imageUrl,
           imageAlt: p.imageAlt,
         }))
@@ -296,24 +290,6 @@ export function Pricing({
                   ))}
                 </ul>
 
-                {/* CTA */}
-                <div className="mt-6 pt-6 border-t border-[var(--border-default)]">
-                  <Button
-                    variant={plan.isPopular ? "primary" : "secondary"}
-                    className={`
-                      w-full group relative overflow-hidden
-                      ${plan.isPopular
-                        ? "bg-[var(--accent-cta)] hover:bg-[var(--accent-cta-hover)] shadow-[0_4px_20px_rgba(255,107,0,0.3)] hover:shadow-[0_6px_30px_rgba(255,107,0,0.5)]"
-                        : "hover:border-[var(--accent-primary)] hover:shadow-[0_4px_20px_rgba(0,240,255,0.15)]"
-                      }
-                    `}
-                    rightIcon={
-                      <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                    }
-                  >
-                    {plan.ctaText}
-                  </Button>
-                </div>
               </div>
 
               {/* Hover glow effect */}
