@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Orbitron, Outfit, Noto_Sans_JP, Noto_Serif_JP } from "next/font/google";
+import LoadingScreen from "@/components/LoadingScreen";
 import "./globals.css";
 
 // Display font - Futuristic, geometric, LED-inspired
@@ -64,6 +65,7 @@ export default function RootLayout({
       <body
         className={`${orbitron.variable} ${outfit.variable} ${notoSansJP.variable} ${notoSerifJP.variable} antialiased`}
       >
+        <LoadingScreen />
         {children}
       </body>
     </html>
