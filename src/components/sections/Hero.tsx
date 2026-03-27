@@ -216,12 +216,13 @@ export function Hero({
   };
 
   // CTAボタンのクリックハンドラ
+  const resolvedCtaLink = ctaLink || "#cta";
   const handleCtaClick = () => {
-    if (ctaLink.startsWith("#")) {
-      const targetId = ctaLink.replace("#", "");
+    if (resolvedCtaLink.startsWith("#")) {
+      const targetId = resolvedCtaLink.replace("#", "");
       document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth" });
     } else {
-      window.open(ctaLink, "_blank", "noopener,noreferrer");
+      window.open(resolvedCtaLink, "_blank", "noopener,noreferrer");
     }
   };
 
