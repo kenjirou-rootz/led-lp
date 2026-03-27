@@ -15,7 +15,6 @@ const defaultLinkCategories = [
     title: "会社情報",
     links: [
       { label: "会社概要", href: "#" },
-      { label: "お客様の声", href: "#testimonials" },
     ],
   },
   {

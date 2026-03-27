@@ -136,7 +136,7 @@ export function Hero({
   youtubeUrl,
   posterUrl = "/images/hero-poster.jpg",
   ctaText = "無料で相談する",
-  ctaLink = "cta",
+  ctaLink = "#cta",
   trustBadge1,
   trustBadge2,
   trustBadge3,

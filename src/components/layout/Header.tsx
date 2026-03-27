@@ -10,7 +10,7 @@ import type { SiteSettings } from "@/lib/sanity";
 
 const navLinks = [
   { label: "選ばれる理由", href: "#reason" },
-  { label: "料金", href: "#pricing" },
+  { label: "料金シミュレーション", href: "#pricing" },
   { label: "FAQ", href: "#faq" },
 ];
 
@@ -103,14 +103,9 @@ export function Header({ siteSettings }: HeaderProps) {
             </div>
 
             {/* Brand Text */}
-            <div className="hidden sm:flex items-baseline gap-1.5">
-              <span className="font-display text-xs font-bold tracking-[0.2em] text-[--accent-primary] uppercase">
-                LED
-              </span>
-              <span className="font-display text-lg font-bold tracking-wide text-[--text-primary] group-hover:text-[--accent-primary] transition-colors duration-300">
-                {siteName}
-              </span>
-            </div>
+            <span className="hidden sm:inline font-display text-lg font-bold tracking-wide text-[--text-primary] group-hover:text-[--accent-primary] transition-colors duration-300">
+              {siteName}
+            </span>
           </motion.a>
 
           {/* Desktop Navigation */}
