@@ -24,6 +24,19 @@ interface PricingPlan {
   imageAlt?: string;
 }
 
+/**
+ * 価格表記の正規化。
+ * CMS(Sanity)の price は自由入力のため「¥」の付け忘れが起こりうる。
+ * 半角/全角の数字で始まる文字列にのみ「¥」を補い、
+ * 「お問い合わせ」「要見積り」等の非数値表記や、既に通貨記号が付いた値はそのまま返す。
+ */
+function formatPrice(price: string | undefined | null): string {
+  if (!price) return "";
+  const trimmed = price.trim();
+  if (!/^[0-9\uFF10-\uFF19]/.test(trimmed)) return trimmed;
+  return `\u00a5${trimmed}`;
+}
+
 const defaultPlans: PricingPlan[] = [
   {
     id: "light",
@@ -252,7 +265,7 @@ export function Pricing({
                         ${plan.isPopular ? "text-[var(--accent-cta)]" : "text-[var(--text-primary)]"}
                       `}
                     >
-                      {plan.price}
+                      {formatPrice(plan.price)}
                     </span>
                     <span className="text-[var(--text-muted)] text-xs sm:text-sm font-medium whitespace-nowrap">
                       {plan.priceNote}

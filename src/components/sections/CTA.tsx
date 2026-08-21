@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "motion/react";
 import {
   ArrowRight,
@@ -37,6 +38,12 @@ interface CTAProps {
   email?: string;
   siteSettings?: SiteSettings;
   ctaData?: CTASectionData;
+}
+
+declare global {
+  interface Window {
+    dataLayer?: Record<string, unknown>[];
+  }
 }
 
 type FormStatus = "idle" | "submitting" | "success" | "error";
@@ -85,6 +92,8 @@ export function CTA({
     }
   };
 
+  const router = useRouter();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("submitting");
@@ -113,8 +122,25 @@ export function CTA({
         throw new Error(result.error || "送信に失敗しました");
       }
 
+      // 送信完了はサンクスページ(/thanks)へ遷移させる。
+      // URLが変わることで GTM 側がページビューとしてコンバージョンを計測できる。
+      const submittedInquiryType = formData.inquiryType;
+
+      // GTM 用のコンバージョン通知。
+      // 本サイトはSPAのため /thanks への遷移では標準のページビューが再発火しない。
+      // GTM側は「履歴の変更(History Change)」トリガーか、この form_submit_success
+      // カスタムイベントのどちらでもコンバージョンを取得できる。
+      if (typeof window !== "undefined") {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: "form_submit_success",
+          inquiry_type: submittedInquiryType,
+        });
+      }
+
       setStatus("success");
       setFormData({ inquiryType: "rental", companyName: "", name: "", email: "", message: "" });
+      router.push(`/thanks?type=${submittedInquiryType}`);
     } catch (error) {
       setStatus("error");
       setErrorMessage(
